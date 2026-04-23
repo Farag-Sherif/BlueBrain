@@ -1,4 +1,4 @@
-import messageImage from "../../Assets/Images/Home/image1.png";
+import messageImage from "../../assets/Images/Home/image1.png";
 import { useLang } from "../../i18n/LanguageContext";
 
 // ====================== BenefitCard Component ======================
