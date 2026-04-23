@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import { useLang } from "../../i18n/LanguageContext";
-import logo from "../../Assets/Images/logo.png";
-import brain from "../../Assets/Images/brain.png";
-import egypt from "../../Assets/Images/egypt.png";
-import saudi from "../../Assets/Images/saudi.png";
-import facebook from "../../Assets/Social-Icons/facebook.png";
-import linkedin from "../../Assets/Social-Icons/linkedin.png";
-import whatsapp from "../../Assets/Social-Icons/whatsapp.png";
-import youtube from "../../Assets/Social-Icons/youtube.png";
+import logo from "../../assets/Images/logo.png";
+import brain from "../../assets/Images/brain.png";
+import egypt from "../../assets/Images/egypt.png";
+import saudi from "../../assets/Images/saudi.png";
+import facebook from "../../assets/Social-Icons/facebook.png";
+import linkedin from "../../assets/Social-Icons/linkedin.png";
+import whatsapp from "../../assets/Social-Icons/whatsapp.png";
+import youtube from "../../assets/Social-Icons/youtube.png";
 import "./Footer.css";
 import { use, useEffect, useState } from "react";
 
