@@ -3,7 +3,7 @@ import landingModileVideo from "../../assets/Video/landingMobile.mp4";
 import volume from "../../assets/Video/volume.png";
 import mute from "../../assets/Video/mute.png";
 import whatsapp from "../../assets/Social-Icons/coloredwhatsapp.png";
-import strongBrain from "../../assets/Images/Home/Strongbrain.png";
+import strongBrain from "../../assets/Images/Home/StrongBrain.png";
 import curve from "../../assets/Images/Home/upCurve.png";
 import blueBrain from "../../assets/Images/Home/BlueBrain.png";
 import brain from "../../assets/Images/brainBlue.png";
