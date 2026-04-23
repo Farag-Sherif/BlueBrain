@@ -1,5 +1,5 @@
-import landingVideo from "../../Assets/Video/landing.mp4";
-import landingModileVideo from "../../Assets/Video/landingMobile.mp4";
+import landingVideo from "../../assets/Video/landing.mp4";
+import landingModileVideo from "../../assets/Video/landingMobile.mp4";
 import volume from "../../assets/Video/volume.png";
 import mute from "../../assets/Video/mute.png";
 import whatsapp from "../../assets/Social-Icons/coloredwhatsapp.png";
