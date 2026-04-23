@@ -1,0 +1,44 @@
+
+@font-face {
+  font-family: '29LT Bukra';
+  src: url('./assets/Font/29ltbukralight.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: '29LT Bukra';
+  src: url('./assets/Font/29ltbukraregular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: '29LT Bukra';
+  src: url('./assets/Font/29ltbukrabold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: '29LT Bukra';
+  src: url('./assets/Font/29ltbukrabolditalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Abu Hijlah';
+  src: url('./assets/Font/abuhijlahbold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+body {
+  font-family: '29LT Bukra', sans-serif;
+  font-weight: 400;
+}

@@ -1,0 +1,446 @@
+import { useState } from "react";
+
+const COLORS = {
+  bg: "#fce4ec",
+  card: "#e8cdd4",
+  accent: "#1a1aff",
+  accentLight: "#4444ff",
+  text: "#1a1aff",
+  muted: "#7a7aaa",
+  white: "#ffffff",
+  dark: "#0d0d5e",
+};
+
+const sampleProjects = Array.from({ length: 6 }, (_, i) => ({
+  id: i,
+  name: "Project name",
+  desc: "Your strategic partner for excellence and creativity in the fields of design and digital development...",
+  tags: ["analysis", "analysis", "analysis"],
+  active: i === 1,
+}));
+
+const faqs = [
+  "Who are Blue Brain",
+  "Who are Blue Brain",
+  "Who are Blue Brain",
+  "Who are Blue Brain",
+  "Who are Blue Brain",
+];
+
+// ─── NAV ────────────────────────────────────────────────────────────────────
+function Nav({ page, setPage }) {
+  const links = ["home", "portfolio", "about", "contact"];
+  const [open, setOpen] = useState(false);
+  return (
+    <nav style={{ background: COLORS.bg, borderBottom: `2px solid ${COLORS.accent}`, position: "sticky", top: 0, zIndex: 100 }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "14px 20px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <span onClick={() => setPage("home")} style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 22, color: COLORS.accent, cursor: "pointer", letterSpacing: 2 }}>
+          🧠 BLUE BRAIN
+        </span>
+        <div style={{ display: "flex", gap: 28 }} className="nav-links">
+          {links.map(l => (
+            <span key={l} onClick={() => setPage(l)} style={{
+              fontFamily: "'Barlow', sans-serif", fontWeight: 600, fontSize: 13,
+              textTransform: "uppercase", letterSpacing: 1.5, cursor: "pointer",
+              color: page === l ? COLORS.accent : COLORS.muted,
+              borderBottom: page === l ? `2px solid ${COLORS.accent}` : "2px solid transparent",
+              paddingBottom: 2, transition: "all 0.2s"
+            }}>{l}</span>
+          ))}
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+// ─── HERO / HOME ─────────────────────────────────────────────────────────────
+function HomePage({ setPage }) {
+  return (
+    <div>
+      {/* Hero */}
+      <section style={{ background: COLORS.bg, padding: "60px 20px 40px", maxWidth: 1100, margin: "0 auto" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 40 }}>
+          <div style={{ flex: "1 1 340px" }}>
+            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: "clamp(42px, 8vw, 80px)", lineHeight: 1, color: COLORS.accent, letterSpacing: -1 }}>
+              BLUE<br />BRAIN
+            </div>
+            <p style={{ fontFamily: "'Barlow', sans-serif", color: COLORS.muted, fontSize: 15, maxWidth: 400, marginTop: 16, lineHeight: 1.7 }}>
+              Your strategic partner for excellence and creativity in design and digital development. We build digital identities that expand your reach.
+            </p>
+            <div style={{ display: "flex", gap: 12, marginTop: 28, flexWrap: "wrap" }}>
+              <button onClick={() => setPage("portfolio")} style={btnStyle(true)}>View Projects</button>
+              <button onClick={() => setPage("contact")} style={btnStyle(false)}>Get in Touch</button>
+            </div>
+          </div>
+          <div style={{ flex: "1 1 280px", display: "flex", justifyContent: "center" }}>
+            <div style={{ width: 260, height: 260, borderRadius: "50% 40% 60% 30%", background: `linear-gradient(135deg, ${COLORS.accent} 0%, #6644ff 100%)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 100 }}>
+              🧠
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Video / Consultation CTA */}
+      <section style={{ background: COLORS.card, margin: "0 auto", maxWidth: 900, borderRadius: 20, overflow: "hidden", marginTop: 40, marginBottom: 40 }}>
+        <div style={{ background: "#c8b8c0", height: 220, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ width: 64, height: 64, borderRadius: "50%", background: "rgba(26,26,255,0.15)", border: `2px solid ${COLORS.accent}`, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+            <div style={{ width: 0, height: 0, borderTop: "14px solid transparent", borderBottom: "14px solid transparent", borderLeft: `22px solid ${COLORS.accent}`, marginLeft: 4 }} />
+          </div>
+        </div>
+        <div style={{ padding: "32px 32px 40px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
+            <span style={{ fontSize: 22 }}>🎯</span>
+            <span style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 700, fontSize: 18, color: COLORS.accent }}>To request a consultation</span>
+          </div>
+          <ConsultationForm />
+        </div>
+      </section>
+
+      {/* Partners */}
+      <section style={{ maxWidth: 1100, margin: "0 auto", padding: "20px 20px 60px" }}>
+        <h2 style={sectionTitle()}>PARTNERS' SUCCESS</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: 14, marginTop: 20 }}>
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} style={{ background: COLORS.card, borderRadius: 12, height: 70, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ fontFamily: "'Barlow', sans-serif", fontSize: 11, color: COLORS.muted, fontWeight: 600, letterSpacing: 1 }}>PARTNER {i + 1}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+// ─── ABOUT ──────────────────────────────────────────────────────────────────
+function AboutPage() {
+  const [openFaq, setOpenFaq] = useState(null);
+  return (
+    <div style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 20px 60px" }}>
+      {/* Who we are */}
+      <section style={{ display: "flex", flexWrap: "wrap", gap: 32, alignItems: "flex-start", marginBottom: 60 }}>
+        <div style={{ flex: "0 0 200px" }}>
+          <div style={{ width: 180, height: 180, borderRadius: "50%", background: `linear-gradient(135deg, ${COLORS.accent}, #6644ff)`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 80 }}>🧠</div>
+        </div>
+        <div style={{ flex: "1 1 300px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+            <span style={{ fontSize: 20 }}>🧠</span>
+            <span style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 700, fontSize: 18, color: COLORS.dark }}>Who we are?</span>
+          </div>
+          <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 28, color: COLORS.accent, marginBottom: 12 }}>BLUE BRAIN</div>
+          <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: 14, color: "#333", lineHeight: 1.8 }}>
+            is your strategic partner for excellence and creativity in the fields of design and digital development. We provide comprehensive solutions including visual identity design, logo design, video ad design for marketing, social media design, product design, mobile app development, and website creation. We are committed to delivering high-quality services that combine innovation with the latest technologies, helping our clients build their digital identities, expand their reach, and engage their target audience.
+          </p>
+        </div>
+      </section>
+
+      {/* FAQs */}
+      <section style={{ marginBottom: 60 }}>
+        <h2 style={sectionTitle()}>QUESTIONS?</h2>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 24 }}>
+          {faqs.map((q, i) => (
+            <div key={i} onClick={() => setOpenFaq(openFaq === i ? null : i)} style={{ background: openFaq === i ? COLORS.accent : "rgba(26,26,255,0.08)", borderRadius: 12, padding: "16px 20px", cursor: "pointer", transition: "all 0.2s" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 600, fontSize: 14, color: openFaq === i ? COLORS.white : COLORS.accent }}>{q}</span>
+                <span style={{ color: openFaq === i ? COLORS.white : COLORS.accent, fontSize: 18 }}>{openFaq === i ? "∧" : "∨"}</span>
+              </div>
+              {openFaq === i && (
+                <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: 13, color: "rgba(255,255,255,0.85)", marginTop: 10, lineHeight: 1.7 }}>
+                  Blue Brain is your strategic partner for excellence and creativity in design and digital development, providing comprehensive solutions for all your digital needs.
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Partners */}
+      <section>
+        <h2 style={sectionTitle()}>PARTNERS' SUCCESS</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))", gap: 14, marginTop: 20 }}>
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} style={{ background: COLORS.card, borderRadius: 12, height: 70, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ fontFamily: "'Barlow', sans-serif", fontSize: 11, color: COLORS.muted, fontWeight: 600, letterSpacing: 1 }}>PARTNER {i + 1}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+// ─── PORTFOLIO ───────────────────────────────────────────────────────────────
+function PortfolioPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 201;
+  return (
+    <div style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 20px 60px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 36 }}>
+        <span style={{ fontSize: 28 }}>🖼️</span>
+        <h1 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: "clamp(28px, 5vw, 48px)", color: COLORS.accent, letterSpacing: 3, margin: 0 }}>OUR PROJECTS</h1>
+      </div>
+
+      {/* Project Grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+        {sampleProjects.map((p) => (
+          <div key={p.id} style={{ background: p.active ? COLORS.accent : COLORS.white, borderRadius: 16, overflow: "hidden", border: p.active ? `none` : `1.5px solid ${COLORS.card}`, transition: "transform 0.2s, box-shadow 0.2s", cursor: "pointer" }}
+            onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 12px 32px rgba(26,26,255,0.15)"; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}>
+            <div style={{ height: 160, background: p.active ? "rgba(255,255,255,0.12)" : COLORS.card, display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+              <span style={{ fontSize: 40, opacity: 0.4 }}>🖥️</span>
+              {p.active && (
+                <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(255,255,255,0.2)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <div style={{ width: 0, height: 0, borderTop: "10px solid transparent", borderBottom: "10px solid transparent", borderLeft: `16px solid white`, marginLeft: 3 }} />
+                  </div>
+                </div>
+              )}
+            </div>
+            <div style={{ padding: "16px 18px 18px" }}>
+              <div style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 700, fontSize: 15, color: p.active ? COLORS.white : COLORS.accent, marginBottom: 6 }}>{p.name}</div>
+              <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: 12, color: p.active ? "rgba(255,255,255,0.75)" : COLORS.muted, lineHeight: 1.6, marginBottom: 12 }}>{p.desc}</p>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                {p.tags.map((t, i) => (
+                  <span key={i} style={{ fontFamily: "'Barlow', sans-serif", fontSize: 10, fontWeight: 600, padding: "3px 10px", borderRadius: 20, background: p.active ? "rgba(255,255,255,0.2)" : "rgba(26,26,255,0.1)", color: p.active ? COLORS.white : COLORS.accent, letterSpacing: 0.5 }}>{t}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Pagination */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 40, flexWrap: "wrap" }}>
+        <PagBtn onClick={() => setCurrentPage(p => Math.max(1, p - 1))}>‹</PagBtn>
+        {[totalPages, totalPages - 1].map(n => (
+          <PagBtn key={n} active={currentPage === n} onClick={() => setCurrentPage(n)}>{n}</PagBtn>
+        ))}
+        <span style={{ color: COLORS.muted, fontFamily: "'Barlow', sans-serif", fontSize: 14 }}>.....</span>
+        {[2, 1].map(n => (
+          <PagBtn key={n} active={currentPage === n} onClick={() => setCurrentPage(n)}>{n}</PagBtn>
+        ))}
+        <PagBtn onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}>›</PagBtn>
+      </div>
+    </div>
+  );
+}
+
+function PagBtn({ children, active, onClick }) {
+  return (
+    <button onClick={onClick} style={{ width: 36, height: 36, borderRadius: "50%", border: `1.5px solid ${active ? COLORS.accent : COLORS.card}`, background: active ? COLORS.accent : "transparent", color: active ? COLORS.white : COLORS.muted, fontFamily: "'Barlow', sans-serif", fontWeight: 700, fontSize: 13, cursor: "pointer", transition: "all 0.2s" }}>
+      {children}
+    </button>
+  );
+}
+
+// ─── CLIENT DETAIL (sample inner page) ───────────────────────────────────────
+function ClientPage() {
+  return (
+    <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 20px 60px" }}>
+      {/* Client header */}
+      <div style={{ position: "relative", marginBottom: 36 }}>
+        <div style={{ display: "flex", gap: 20, flexWrap: "wrap" }}>
+          <div style={{ width: 90, height: 90, borderRadius: 16, background: COLORS.card }} />
+          <div style={{ width: 140, height: 90, borderRadius: 16, background: COLORS.card }} />
+        </div>
+        <div style={{ position: "absolute", top: 0, right: 0, background: COLORS.accent, borderRadius: "0 0 0 24px", padding: "10px 22px" }}>
+          <span style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 700, fontSize: 14, color: COLORS.white }}>Client Name</span>
+        </div>
+      </div>
+
+      <section style={{ marginBottom: 40 }}>
+        <h2 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 32, color: COLORS.accent, letterSpacing: 2, marginBottom: 14 }}>DESCRIPTION</h2>
+        <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: 14, color: "#333", lineHeight: 1.8 }}>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultricies diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. Pellentesque congue. Ut in risus volutpat.
+        </p>
+      </section>
+
+      <section style={{ marginBottom: 40 }}>
+        <h2 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 30, color: COLORS.accent, letterSpacing: 2, marginBottom: 20, lineHeight: 1.2 }}>PROCESSES OF<br />PRODUCTION</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} style={{ background: COLORS.card, borderRadius: 14, height: 180 }} />
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h2 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 28, color: COLORS.accent, letterSpacing: 2, marginBottom: 20 }}>DESIGNS</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14 }}>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} style={{ background: COLORS.card, borderRadius: 14, height: 160 }} />
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+// ─── CONTACT ─────────────────────────────────────────────────────────────────
+function ContactPage() {
+  return (
+    <div style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 20px 60px" }}>
+      {/* Map placeholder */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 40 }}>
+        {[0, 1].map(i => (
+          <div key={i} style={{ background: COLORS.card, borderRadius: 16, height: 180, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>
+            <span style={{ fontSize: 32 }}>🗺️</span>
+            <span style={{ position: "absolute", bottom: 10, left: 14, fontFamily: "'Barlow', sans-serif", fontSize: 11, color: COLORS.muted }}>Map location {i + 1}</span>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 32 }}>
+        {/* Left info */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+          <InfoCard title="Business Hours" items={[
+            { icon: "🕐", text: "Sunday – Thursday 9am to 5pm" },
+            { icon: "🕐", text: "Sunday – 9am to 2pm" },
+            { icon: "🕐", text: "Saturday & Friday – Closed" },
+          ]} />
+          <InfoCard title="Contact Info for Egypt" items={[
+            { icon: "📍", text: "000000000000000000000\n000000000000000000" },
+            { icon: "📞", text: "0000 0000 00" },
+            { icon: "✉️", text: "2222222@gmail.com" },
+          ]} />
+          <InfoCard title="Contact Info for Saudi Arabia" items={[
+            { icon: "📍", text: "000000000000000000000\n000000000000000000" },
+            { icon: "📞", text: "0000 0000 00" },
+            { icon: "✉️", text: "2222222@gmail.com" },
+          ]} />
+        </div>
+
+        {/* Right form */}
+        <div style={{ background: COLORS.white, borderRadius: 20, padding: "32px 28px", border: `1.5px solid ${COLORS.card}` }}>
+          <h2 style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: 34, color: COLORS.accent, marginBottom: 6 }}>Get in touch</h2>
+          <p style={{ fontFamily: "'Barlow', sans-serif", fontSize: 13, color: COLORS.muted, marginBottom: 24 }}>We'll reach out to you as soon as we can.</p>
+          <ContactForm />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function InfoCard({ title, items }) {
+  return (
+    <div style={{ background: COLORS.white, borderRadius: 16, padding: "20px 22px", border: `1.5px solid ${COLORS.card}` }}>
+      <div style={{ fontFamily: "'Barlow', sans-serif", fontWeight: 700, fontSize: 15, color: COLORS.accent, marginBottom: 14, borderBottom: `2px solid ${COLORS.accent}`, paddingBottom: 6, display: "inline-block" }}>{title}</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 10 }}>
+        {items.map((item, i) => (
+          <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+            <span style={{ fontSize: 14, marginTop: 1 }}>{item.icon}</span>
+            <span style={{ fontFamily: "'Barlow', sans-serif", fontSize: 12, color: COLORS.muted, whiteSpace: "pre-line" }}>{item.text}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ContactForm() {
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [sent, setSent] = useState(false);
+  const handle = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }));
+  const submit = () => { if (form.name && form.email) { setSent(true); setTimeout(() => setSent(false), 3000); setForm({ name: "", email: "", message: "" }); } };
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      {[["Name", "name", "text"], ["E-mail", "email", "email"]].map(([label, key, type]) => (
+        <div key={key}>
+          <label style={labelStyle()}>{label}</label>
+          <input type={type} value={form[key]} onChange={handle(key)} style={inputStyle()} />
+        </div>
+      ))}
+      <div>
+        <label style={labelStyle()}>Message</label>
+        <textarea value={form.message} onChange={handle("message")} rows={5} style={{ ...inputStyle(), resize: "vertical", minHeight: 100 }} />
+      </div>
+      {sent ? <div style={{ textAlign: "center", color: "green", fontFamily: "'Barlow', sans-serif", fontWeight: 600 }}>✓ Message sent!</div>
+        : <button onClick={submit} style={{ ...btnStyle(true), width: "100%", padding: "14px", fontSize: 15 }}>Submit</button>}
+    </div>
+  );
+}
+
+function ConsultationForm() {
+  const [form, setForm] = useState({ name: "", phone: "", type: "", consultation: "" });
+  const [sent, setSent] = useState(false);
+  const handle = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.value }));
+  const submit = () => { if (form.name) { setSent(true); setTimeout(() => setSent(false), 3000); setForm({ name: "", phone: "", type: "", consultation: "" }); } };
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+        {[["Name", "name"], ["Phone Number", "phone"]].map(([label, key]) => (
+          <div key={key}>
+            <label style={labelStyle()}>{label}</label>
+            <input value={form[key]} onChange={handle(key)} style={inputStyle()} />
+          </div>
+        ))}
+      </div>
+      <div>
+        <label style={labelStyle()}>Type of consultation</label>
+        <input value={form.type} onChange={handle("type")} style={inputStyle()} />
+      </div>
+      <div>
+        <label style={labelStyle()}>Consultation</label>
+        <textarea value={form.consultation} onChange={handle("consultation")} rows={4} style={{ ...inputStyle(), resize: "vertical" }} />
+      </div>
+      {sent ? <div style={{ textAlign: "center", color: "green", fontFamily: "'Barlow', sans-serif", fontWeight: 600 }}>✓ Submitted!</div>
+        : <button onClick={submit} style={{ ...btnStyle(true), width: "100%", padding: "14px", fontSize: 15 }}>Submit</button>}
+    </div>
+  );
+}
+
+// ─── FOOTER ───────────────────────────────────────────────────────────────────
+function Footer({ setPage }) {
+  return (
+    <footer style={{ background: COLORS.accent, padding: "32px 20px", marginTop: 20 }}>
+      <div style={{ maxWidth: 1100, margin: "0 auto", display: "flex", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", gap: 20 }}>
+        <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 800, fontSize: 22, color: COLORS.white, letterSpacing: 2 }}>🧠 BLUE BRAIN</span>
+        <div style={{ display: "flex", gap: 24 }}>
+          {["home", "portfolio", "about", "contact"].map(l => (
+            <span key={l} onClick={() => setPage(l)} style={{ fontFamily: "'Barlow', sans-serif", fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1, color: "rgba(255,255,255,0.7)", cursor: "pointer" }}>{l}</span>
+          ))}
+        </div>
+        <span style={{ fontFamily: "'Barlow', sans-serif", fontSize: 12, color: "rgba(255,255,255,0.5)" }}>© 2026 Blue Brain</span>
+      </div>
+    </footer>
+  );
+}
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+function btnStyle(primary) {
+  return {
+    fontFamily: "'Barlow', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: 1.5,
+    textTransform: "uppercase", padding: "12px 28px", borderRadius: 50, cursor: "pointer",
+    border: `2px solid ${COLORS.accent}`,
+    background: primary ? COLORS.accent : "transparent",
+    color: primary ? COLORS.white : COLORS.accent,
+    transition: "all 0.2s",
+  };
+}
+function sectionTitle() {
+  return { fontFamily: "'Barlow Condensed', sans-serif", fontWeight: 900, fontSize: "clamp(24px, 4vw, 40px)", color: COLORS.accent, letterSpacing: 2, margin: 0 };
+}
+function labelStyle() {
+  return { display: "block", fontFamily: "'Barlow', sans-serif", fontSize: 12, fontWeight: 600, color: COLORS.dark, marginBottom: 6, letterSpacing: 0.5 };
+}
+function inputStyle() {
+  return { width: "100%", boxSizing: "border-box", padding: "10px 14px", border: `1.5px solid ${COLORS.card}`, borderRadius: 8, fontFamily: "'Barlow', sans-serif", fontSize: 13, color: COLORS.dark, background: COLORS.white, outline: "none", transition: "border-color 0.2s" };
+}
+
+// ─── APP ROOT ─────────────────────────────────────────────────────────────────
+export default function App() {
+  const [page, setPage] = useState("home");
+  return (
+    <div style={{ minHeight: "100vh", background: COLORS.bg, fontFamily: "'Barlow', sans-serif" }}>
+      <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet" />
+      <Nav page={page} setPage={setPage} />
+      <main>
+        {page === "home" && <HomePage setPage={setPage} />}
+        {page === "about" && <AboutPage />}
+        {page === "portfolio" && <PortfolioPage />}
+        {page === "portfolio-detail" && <ClientPage />}
+        {page === "contact" && <ContactPage />}
+      </main>
+      <Footer setPage={setPage} />
+    </div>
+  );
+}

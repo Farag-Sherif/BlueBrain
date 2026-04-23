@@ -1,0 +1,39 @@
+@import "tailwindcss";
+:root{
+  --font-size: 16px;
+  --line-height: 1.5;
+  --main: #125EF2;
+  --second: #000099;
+}
+*{
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-size: var(--font-size);
+  line-height: var(--line-height);
+      --tw-tracking: var(--tracking-widest) /* 0.1em */;
+    letter-spacing: var(--tracking-widest) /* 0.1em */;
+}
+@property --tw-tracking {
+    syntax: "*";
+    inherits: false;
+}
+
+a {
+  text-decoration: none;
+}
+.main {
+  background-color: var(--main);
+}
+.second{
+  background-color: var(--second);
+}
+.mainC{
+  color: var(--main);
+}
+.secondC{
+  color: var(--second);
+}

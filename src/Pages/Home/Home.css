@@ -1,0 +1,51 @@
+.services{
+    .serviceTitle:hover ~ .description{
+        opacity: 1;
+        max-height: fit-content;
+        transition: all 0.5s ease-in-out;
+        text-align: start;
+        
+    }
+}
+.custom-shape-divider-top-1776792837 {
+    direction: ltr;
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.custom-shape-divider-top-1776792837 svg {
+    position: relative;
+    display: block;
+    width: calc(300% + 1.3px);
+    height: 228px;
+}
+
+.custom-shape-divider-top-1776792837 .shape-fill {
+    fill: #FFFFFF;
+}
+.custom-shape-divider-bottom-1776792791 {
+    direction: ltr;
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1776792791 svg {
+    position: relative;
+    display: block;
+    width: calc(300% + 1.3px);
+    height: 228px;
+}
+
+.custom-shape-divider-bottom-1776792791 .shape-fill {
+    fill: #FFFFFF;
+}
