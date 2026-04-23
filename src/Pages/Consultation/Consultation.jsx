@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Title from "../../Components/Title/Title";
-import consultationVideo from "../../Assets/Video/landing.mp4";
+import consultationVideo from "../../assets/Video/landing.mp4";
 import { useLang } from "../../i18n/LanguageContext";
 
 export default function Consultation() {
