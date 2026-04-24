@@ -149,7 +149,7 @@ export default function ProjectDetails() {
                 key={i}
                 src={img.file}
                 alt={`design-${i}`}
-                className="w-full h-50 object-cover rounded-xl"
+                className="w-full h-70 object-cover rounded-xl"
               />
             ))}
           </Carousel>
