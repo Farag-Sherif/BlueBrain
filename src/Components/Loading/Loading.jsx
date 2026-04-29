@@ -1,4 +1,4 @@
-import whiteBrain from "../../Assets/Images/whiteBrain.png";
+import whiteBrain from "../../assets/Images/whiteBrain.png";
 
 export default function Loading() {
   return (
