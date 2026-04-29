@@ -3,15 +3,17 @@ import { LanguageProvider } from "./i18n/LanguageContext";
 import Header from "./Components/Header/Header";
 import Footer from "./Components/Footer/Footer";
 import AppRoutes from "./Routes";
+import ScrollToTop from "./Components/Scrolltotop ";
 // import your page routes here
 
 const App = () => {
   return (
-      <LanguageProvider>
+    <LanguageProvider>
+      <ScrollToTop />
       <Header />
-      <AppRoutes/>
-        <Footer />
-      </LanguageProvider>
+      <AppRoutes />
+      <Footer />
+    </LanguageProvider>
   );
 };
 

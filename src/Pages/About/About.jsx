@@ -4,6 +4,7 @@ import curve from "../../assets/Images/Home/serviceTitleBG.png";
 import Brain from "../../assets/Images/brainBlue.png";
 import Title from "../../Components/Title/Title";
 import { useLang } from "../../i18n/LanguageContext";
+import Loading from "../../Components/Loading/Loading";
 
 export default function About() {
   const { t, api, lang } = useLang();
@@ -12,22 +13,25 @@ export default function About() {
   const [clients, setClients] = useState([]);
   const [faq, setFaq] = useState([]);
   const [about, setAbout] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const [clientsData, faqData, settingsData] = await Promise.all([
         api.getClients(),
         api.getFaq(),
         api.getSettings(),
       ]);
-
       setClients(clientsData.length > 0 ? clientsData : []);
       setFaq(faqData);
       if (settingsData) setAbout(settingsData);
+      setLoading(false);
     };
-
     fetchData();
   }, [lang]);
+
+  if (loading) return <Loading />;
 
   return (
     <div className="relative">
@@ -66,11 +70,7 @@ export default function About() {
               <p className="text-sm text-gray-700 leading-relaxed">
                 <span className="text-xl font-bold mainC">BLUE BRAIN </span>
                 {about?.about_description ??
-                  `is your strategic partner for excellence and creativity in design
-                and digital development. We provide visual identity, logo design,
-                video ads, social media design, apps and websites. Founded in
-                2014, we have served over 200 clients across Egypt, Saudi Arabia,
-                and beyond.`}
+                  `is your strategic partner for excellence and creativity in design and digital development. We provide visual identity, logo design, video ads, social media design, apps and websites. Founded in 2014, we have served over 200 clients across Egypt, Saudi Arabia, and beyond.`}
               </p>
             </div>
           </div>
@@ -118,13 +118,10 @@ export default function About() {
 
 function AccordionItem({ item }) {
   const [open, setOpen] = useState(false);
-
   return (
     <div
       onClick={() => setOpen(!open)}
-      className={`rounded-xl px-5 py-4 cursor-pointer transition-all duration-200 ${
-        open ? "second" : "main"
-      }`}>
+      className={`rounded-xl px-5 py-4 cursor-pointer transition-all duration-200 ${open ? "second" : "main"}`}>
       <div className="flex justify-between items-center">
         <span className="text-white text-sm font-medium">{item.question}</span>
         <span className="text-white text-xs">{open ? "▲" : "▼"}</span>

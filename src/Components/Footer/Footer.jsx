@@ -70,8 +70,8 @@ fetchBranches();
                 key={title}
                 to={href}
                 title={title}
-                className="w-12 h-12 flex items-center justify-center border-2 border-white/60 rounded-md font-bold hover:bg-white/10 transition">
-                <img src={label} alt={title} className="w-8 h-8" />
+                className="w-12 h-12 flex items-center justify-center">
+                <img src={label} alt={title} className="w-full h-auto" />
               </Link>
             ))}
           </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Title from "../../Components/Title/Title";
 import { useLang } from "../../i18n/LanguageContext";
+import Loading from "../../Components/Loading/Loading";
 
 export default function ContactUs() {
   const { t, lang, api } = useLang();
@@ -8,27 +9,27 @@ export default function ContactUs() {
 
   const [branches, setBranches] = useState([]);
   const [about, setAbout] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchBranches = async () => {
-      const data = await api.getBranches();
-      setBranches(data);
+    const fetchAll = async () => {
+      setLoading(true);
+      const [branchesData, settingsData] = await Promise.all([
+        api.getBranches(),
+        api.getSettings(),
+      ]);
+      setBranches(branchesData);
+      setAbout(settingsData);
+      setLoading(false);
     };
-    fetchBranches();
+    fetchAll();
   }, [lang]);
 
-  useEffect(() => {
-    const fetchAbout = async () => {
-      const data = await api.getSettings();
-      setAbout(data);
-    };
-    fetchAbout();
-  }, [lang]);
+  if (loading) return <Loading />;
 
   return (
     <>
       <Title>{c.pageTitle}</Title>
-
       <div className="container mx-auto px-5 py-10">
         {/* MAPS */}
         <div className="grid md:grid-cols-2 gap-4 mb-10">
@@ -121,7 +122,6 @@ function ContactForm() {
         email: form.email,
         message: form.message,
       });
-      console.log(res);
       if (res.status) {
         setSent(true);
         setForm({ name: "", email: "", message: "" });
@@ -154,7 +154,6 @@ function ContactForm() {
           />
         </div>
       ))}
-
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
           {c.messageLabel}
@@ -166,7 +165,6 @@ function ContactForm() {
           className="w-full px-3 py-2 border border-indigo-200 rounded-md outline-none focus:border-indigo-600"
         />
       </div>
-
       {sent ? (
         <div className="text-center text-green-600 font-semibold">
           {c.successMsg}

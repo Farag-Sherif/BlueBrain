@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Title from "../../Components/Title/Title";
 import { useLang } from "../../i18n/LanguageContext";
+import Loading from "../../Components/Loading/Loading";
 
 function ProjectCard({ project }) {
   return (
@@ -47,31 +48,26 @@ export default function OurProjects() {
   const p = t.projects;
 
   const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProjects = async () => {
+      setLoading(true);
       const data = await api.getProjects();
-      console.log(data);
       if (data.length > 0) {
         setProjects(data);
-      } else {
-        console.error("Error fetching projects");
       }
+      setLoading(false);
     };
     fetchProjects();
   }, [lang]);
+
+  if (loading) return <Loading />;
 
   return (
     <>
       <Title>{p.pageTitle}</Title>
       <section className="min-h-screen px-5 pb-20 container mx-auto">
-        <div className="flex items-center gap-3 mb-15 justify-center">
-          <span className="text-3xl md:text-4xl lg:text-5xl">📊</span>
-          <h1 className="text-3xl md:text-4xl lg:text-6xl font-bold mainC tracking-wide">
-            {p.pageTitle}
-          </h1>
-        </div>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
           {projects.map((project) => (
             <div

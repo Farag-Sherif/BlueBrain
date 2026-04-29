@@ -27,13 +27,13 @@ const ServicesSection = () => {
 
   return (
     <section className="pt-20 services overflow-x-hidden">
-      <div className="flex flex-col items-start gap-5 mb-10 container mx-auto px-6">
-        <h1 className="text-3xl md:text-5xl font-bold mainC uppercase">
+      <div className="flex flex-col items-start md:gap-5 mb-10 container mx-auto px-6">
+        <h1 className="text-xl md:text-5xl font-bold mainC uppercase">
           {h.servicesTitle[0]}
         </h1>
-        <h1 className="text-4xl md:text-6xl font-bold mainC uppercase md:-mt-15">
+        <h1 className="text-2xl md:text-6xl font-bold mainC uppercase -mt-5 md:-mt-15">
           {h.servicesTitle[1]}
-          <span className="text-7xl md:text-9xl font-bold">
+          <span className="text-5xl md:text-9xl font-bold">
             {lang === "en" ? "?" : "؟"}
           </span>
         </h1>
@@ -47,7 +47,7 @@ const ServicesSection = () => {
             <div
               key={svc.id}
               className={`
-                relative z-0 w-full
+                relative w-full
                 flex flex-col gap-40 items-center justify-around
                 md:gap-10 mb-40
                 ${isEven ? "md:flex-row" : "md:flex-row-reverse"}
@@ -95,7 +95,7 @@ const ServicesSection = () => {
                       : isEven
                         ? "left-0"
                         : "right-0 md:right-20"
-                  } mt-3 w-full md:w-1/2 h-fit px-10 block text-sm md:text-base secondC leading-relaxed max-h-0 opacity-0 hover:max-h-fit hover:opacity-100 transition-all duration-500 ease-in-out`}>
+                  } mt-3 w-full md:w-1/2 h-fit p-5 bg-white shadow-2xl rounded-2xl z-9999 md:px-10  block text-sm md:text-base secondC leading-relaxed max-h-0 opacity-0 hover:max-h-fit hover:opacity-100 transition-all duration-500 ease-in-out`}>
                   {svc.description}
                 </span>
               </div>
