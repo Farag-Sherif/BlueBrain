@@ -8,12 +8,7 @@ import ScrollReveal from "../../Components/ScrollReveal/ScrollReveal";
 const VideoCard = ({ item, onPlay }) => (
   <div className="group bg-white rounded-2xl overflow-hidden shadow-md">
     <div className="relative h-60 cursor-pointer" onClick={() => onPlay(item)}>
-      <video
-        src={item.file}
-        className="w-full h-full object-cover"
-        muted
-        preload="metadata"
-      />
+      <img src={item.file} alt="media" className="w-full h-full object-cover" />
       <div className="absolute inset-0 bg-indigo-500/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
         <div className="w-12 h-12 rounded-full border-2 border-white flex items-center justify-center text-white bg-white/20">
           ▶
@@ -36,7 +31,6 @@ export default function ProjectDetails() {
     const fetchProject = async () => {
       setLoading(true);
       const data = await api.getProjectDetails(id);
-      console.log("Fetched project details:", data);
       setProject(data[0]);
       setLoading(false);
     };
@@ -103,11 +97,7 @@ export default function ProjectDetails() {
             ))}
           </div>
           <span
-            className={`px-4 py-1 rounded-full text-sm font-semibold ${
-              project.status === "completed"
-                ? "bg-green-100 text-green-700"
-                : "bg-yellow-100 text-yellow-700"
-            }`}>
+            className={`px-4 py-1 rounded-full text-sm font-semibold ${project.status === "completed" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>
             {project.status === "completed" ? p.completed : p.inProgress}
           </span>
           {project.link && (
@@ -178,11 +168,11 @@ export default function ProjectDetails() {
             ✕
           </button>
           <div className="w-[90%] md:w-[70%] aspect-video bg-black rounded-lg overflow-hidden">
-            <video
+            <iframe
               className="w-full h-full"
               src={video.file}
-              controls
-              autoPlay
+              title="process video"
+              allowFullScreen
             />
           </div>
         </div>
