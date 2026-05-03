@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Title from "../../Components/Title/Title";
 import { useLang } from "../../i18n/LanguageContext";
 import Loading from "../../Components/Loading/Loading";
+import ScrollReveal from "../../Components/ScrollReveal/ScrollReveal";
 
 function ProjectCard({ project }) {
   return (
@@ -18,10 +19,9 @@ function ProjectCard({ project }) {
         <img
           src={project.image}
           alt={project.title}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain py-5 bg-[#125df25e]"
         />
       </div>
-
       <div className="p-4">
         <h3 className="font-bold text-sm md:text-md lg:text-lg mb-1 mainC group-hover:text-indigo-700 transition">
           {project.title}
@@ -54,9 +54,7 @@ export default function OurProjects() {
     const fetchProjects = async () => {
       setLoading(true);
       const data = await api.getProjects();
-      if (data.length > 0) {
-        setProjects(data);
-      }
+      if (data.length > 0) setProjects(data);
       setLoading(false);
     };
     fetchProjects();
@@ -69,12 +67,14 @@ export default function OurProjects() {
       <Title>{p.pageTitle}</Title>
       <section className="min-h-screen px-5 pb-20 container mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-          {projects.map((project) => (
-            <div
+          {projects.map((project, index) => (
+            <ScrollReveal
               key={project.id}
+              variant="fadeUp"
+              delay={`${(index % 3) * 100}ms`}
               className="cursor-pointer transform hover:-translate-y-1 transition duration-300">
               <ProjectCard project={project} />
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </section>

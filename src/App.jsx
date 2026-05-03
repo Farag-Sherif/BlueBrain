@@ -4,6 +4,7 @@ import Header from "./Components/Header/Header";
 import Footer from "./Components/Footer/Footer";
 import AppRoutes from "./Routes";
 import ScrollToTop from "./Components/Scrolltotop ";
+import Whatsapp from "./Components/Whatsapp/Whatsapp";
 // import your page routes here
 
 const App = () => {
@@ -12,6 +13,7 @@ const App = () => {
       <ScrollToTop />
       <Header />
       <AppRoutes />
+      <Whatsapp />
       <Footer />
     </LanguageProvider>
   );

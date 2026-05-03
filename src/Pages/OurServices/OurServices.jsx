@@ -3,6 +3,7 @@ import { useLang } from "../../i18n/LanguageContext";
 import Title from "../../Components/Title/Title";
 import serviceTitleBG from "../../assets/Images/Home/serviceTitleBG.png";
 import Loading from "../../Components/Loading/Loading";
+import ScrollReveal from "../../Components/ScrollReveal/ScrollReveal";
 
 // ─── OfferModal ───────────────────────────────────────────────────────────────
 function OfferModal({ service, onClose }) {
@@ -133,11 +134,7 @@ function ServiceCard({ service, index, lang, onOfferClick }) {
   return (
     <div
       onClick={() => setExpanded((prev) => !prev)}
-      className={`group relative bg-white rounded-3xl overflow-hidden shadow-md transition-all duration-500 cursor-pointer border-2 ${
-        expanded
-          ? "shadow-2xl -translate-y-2 border-indigo-500"
-          : "border-transparent hover:shadow-2xl hover:-translate-y-2 hover:border-indigo-500"
-      }`}>
+      className={`group relative bg-white rounded-3xl overflow-hidden shadow-md transition-all duration-500 cursor-pointer border-2 ${expanded ? "shadow-2xl -translate-y-2 border-indigo-500" : "border-transparent hover:shadow-2xl hover:-translate-y-2 hover:border-indigo-500"}`}>
       <div className="absolute top-4 left-4 z-10 w-10 h-10 main rounded-full flex items-center justify-center text-white font-black text-sm shadow-lg">
         {String(index + 1).padStart(2, "0")}
       </div>
@@ -224,20 +221,22 @@ export default function OurServices() {
         className="relative pb-32 pt-10"
         dir={lang === "ar" ? "rtl" : "ltr"}>
         <div className="container mx-auto px-5 mb-16">
-          <div className="flex flex-col items-start md:gap-2 mb-2">
-            <h1 className="text-xl md:text-5xl font-bold mainC uppercase">
-              {h.servicesTitle?.[0]}
-            </h1>
-            <h1 className="text-2xl md:text-6xl font-bold mainC uppercase -mt-5 md:-mt-15">
-              {h.servicesTitle?.[1]}
-              <span className="text-5xl md:text-9xl font-bold">
-                {lang === "ar" ? "؟" : "?"}
-              </span>
-            </h1>
-          </div>
-          <p className="text-gray-500 max-w-xl text-sm md:text-base leading-relaxed mt-4">
-            {h.aboutText}
-          </p>
+          <ScrollReveal variant="fadeUp">
+            <div className="flex flex-col items-start md:gap-2 mb-2">
+              <h1 className="text-xl md:text-5xl font-bold mainC uppercase">
+                {h.servicesTitle?.[0]}
+              </h1>
+              <h1 className="text-2xl md:text-6xl font-bold mainC uppercase -mt-5 md:-mt-15">
+                {h.servicesTitle?.[1]}
+                <span className="text-5xl md:text-9xl font-bold">
+                  {lang === "ar" ? "؟" : "?"}
+                </span>
+              </h1>
+            </div>
+            <p className="text-gray-500 max-w-xl text-sm md:text-base leading-relaxed mt-4">
+              {h.aboutText}
+            </p>
+          </ScrollReveal>
         </div>
 
         <img
@@ -250,37 +249,43 @@ export default function OurServices() {
         <div className="container mx-auto pt-10 px-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
             {services.map((svc, index) => (
-              <ServiceCard
+              <ScrollReveal
                 key={svc.id ?? index}
-                service={svc}
-                index={index}
-                lang={lang}
-                onOfferClick={setSelectedService}
-              />
+                variant="fadeUp"
+                delay={`${(index % 3) * 100}ms`}>
+                <ServiceCard
+                  service={svc}
+                  index={index}
+                  lang={lang}
+                  onOfferClick={setSelectedService}
+                />
+              </ScrollReveal>
             ))}
           </div>
         </div>
 
         <div className="container mx-auto px-5 mt-20">
-          <div className="second rounded-3xl p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-2">
-                {lang === "ar"
-                  ? "مستعد تبدأ مشروعك؟"
-                  : "Ready to start your project?"}
-              </h2>
-              <p className="text-white/70 text-sm">
-                {lang === "ar"
-                  ? "تواصل معنا الآن واحصل على استشارة مجانية"
-                  : "Contact us now and get a free consultation"}
-              </p>
+          <ScrollReveal variant="zoomIn" delay="100ms">
+            <div className="second rounded-3xl p-10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+              <div>
+                <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-2">
+                  {lang === "ar"
+                    ? "مستعد تبدأ مشروعك؟"
+                    : "Ready to start your project?"}
+                </h2>
+                <p className="text-white/70 text-sm">
+                  {lang === "ar"
+                    ? "تواصل معنا الآن واحصل على استشارة مجانية"
+                    : "Contact us now and get a free consultation"}
+                </p>
+              </div>
+              <a
+                href="/consultation"
+                className="main px-8 py-3 rounded-2xl text-white font-bold text-lg shadow-lg hover:scale-105 transition-transform duration-300 whitespace-nowrap">
+                {lang === "ar" ? "ابدأ الآن" : "Get Started"}
+              </a>
             </div>
-            <a
-              href="/consultation"
-              className="main px-8 py-3 rounded-2xl text-white font-bold text-lg shadow-lg hover:scale-105 transition-transform duration-300 whitespace-nowrap">
-              {lang === "ar" ? "ابدأ الآن" : "Get Started"}
-            </a>
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 

@@ -25,15 +25,15 @@
 
 ## ⚙️ Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Framework | React 18 |
-| Routing | React Router v6 |
-| Styling | Tailwind CSS |
-| Icons | React Icons + FontAwesome |
-| Language | JavaScript (JSX) |
-| Build Tool | Vite |
-| API | Custom REST API (`createApi`) |
+| Layer      | Technology                    |
+| ---------- | ----------------------------- |
+| Framework  | React 18                      |
+| Routing    | React Router v6               |
+| Styling    | Tailwind CSS                  |
+| Icons      | React Icons + FontAwesome     |
+| Language   | JavaScript (JSX)              |
+| Build Tool | Vite                          |
+| API        | Custom REST API (`createApi`) |
 
 ---
 
@@ -41,7 +41,7 @@
 
 ```
 src/
-├── Assets/                  # Images, videos, fonts
+├── assets/                  # Images, videos, fonts
 ├── Components/
 │   ├── APIs/
 │   │   └── APIs.js          # createApi() — all API calls
@@ -118,16 +118,16 @@ npm run preview
 
 ## 📄 Pages
 
-| Page | Route | Description |
-|---|---|---|
-| Home | `/` | Hero, about section, services, projects, clients |
-| About | `/about` | Who we are, FAQ accordion, partners logos |
-| Our Team | `/team` | Team member cards with social links |
-| Our Services | `/services` | Service cards with offer submission form |
-| Portfolio | `/Portfolio` | Projects grid with tags and filters |
-| Project Details | `/project-details/:id` | Images & video carousels, project info |
-| Consultation | `/consultation` | Consultation request form with service types |
-| Contact | `/contact` | Branch maps, opening hours, contact form |
+| Page            | Route                  | Description                                      |
+| --------------- | ---------------------- | ------------------------------------------------ |
+| Home            | `/`                    | Hero, about section, services, projects, clients |
+| About           | `/about`               | Who we are, FAQ accordion, partners logos        |
+| Our Team        | `/team`                | Team member cards with social links              |
+| Our Services    | `/services`            | Service cards with offer submission form         |
+| Portfolio       | `/Portfolio`           | Projects grid with tags and filters              |
+| Project Details | `/project-details/:id` | Images & video carousels, project info           |
+| Consultation    | `/consultation`        | Consultation request form with service types     |
+| Contact         | `/contact`             | Branch maps, opening hours, contact form         |
 
 ---
 
@@ -140,8 +140,8 @@ Language is managed via `LanguageContext` using React Context API.
 const { t, lang, toggleLang } = useLang();
 
 // Access translations
-t.services.pageTitle   // "OUR SERVICES" | "خدماتنا"
-t.contact.sendBtn      // "Submit" | "إرسال"
+t.services.pageTitle; // "OUR SERVICES" | "خدماتنا"
+t.contact.sendBtn; // "Submit" | "إرسال"
 ```
 
 **Adding a new string:**
@@ -168,10 +168,10 @@ Update this value if the backend URL changes.
 
 ## 📞 Contact
 
-| Office | Email | Location |
-|---|---|---|
-| Egypt | egypt@bluebrain.com | Cairo, Egypt |
-| Saudi Arabia | ksa@bluebrain.com | Riyadh, Saudi Arabia |
+| Office       | Email               | Location             |
+| ------------ | ------------------- | -------------------- |
+| Egypt        | egypt@bluebrain.com | Cairo, Egypt         |
+| Saudi Arabia | ksa@bluebrain.com   | Riyadh, Saudi Arabia |
 
 ---
 

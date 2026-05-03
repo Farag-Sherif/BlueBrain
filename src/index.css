@@ -17,6 +17,9 @@ body {
       --tw-tracking: var(--tracking-widest) /* 0.1em */;
     letter-spacing: var(--tracking-widest) /* 0.1em */;
 }
+.root{
+  overflow: hidden;
+}
 @property --tw-tracking {
     syntax: "*";
     inherits: false;
@@ -36,4 +39,31 @@ a {
 }
 .secondC{
   color: var(--second);
+}
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  scrollbar-gutter: stable;
+}
+@layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
+}
+header {
+  padding-right: 0;           /* أو padding-left حسب RTL */
+  transition: padding 0.2s;
+}
+
+html:has(body::-webkit-scrollbar) header,
+body:has(::-webkit-scrollbar) header {
+  padding-right: 17px;   /* أو padding-left في RTL */
+}
+body {
+  overflow-y: scroll;   /* يخلي الـ scrollbar ظاهر دايمًا */
+}
+header {
+  padding-right: var(--removed-body-scroll-bar-size, 0px);
 }

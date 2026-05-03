@@ -1,15 +1,16 @@
 import { Link } from "react-router-dom";
 import { useLang } from "../../i18n/LanguageContext";
-import logo from "../../Assets/Images/logo.png";
-import brain from "../../Assets/Images/brain.png";
-import egypt from "../../Assets/Images/egypt.png";
-import saudi from "../../Assets/Images/saudi.png";
-import facebook from "../../Assets/Social-Icons/facebook.png";
-import linkedin from "../../Assets/Social-Icons/linkedin.png";
-import whatsapp from "../../Assets/Social-Icons/whatsapp.png";
-import youtube from "../../Assets/Social-Icons/youtube.png";
+import logo from "../../assets/Images/logo.png";
+import brain from "../../assets/Images/brain.png";
+import egypt from "../../assets/Images/egypt.png";
+import saudi from "../../assets/Images/saudi.png";
+import facebook from "../../assets/Social-Icons/facebook.png";
+import linkedin from "../../assets/Social-Icons/linkedin.png";
+import whatsapp from "../../assets/Social-Icons/whatsapp.png";
+import youtube from "../../assets/Social-Icons/youtube.png";
 import "./Footer.css";
 import { use, useEffect, useState } from "react";
+import { FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
 
 const Footer = () => {
   const { t, lang, api } = useLang();
@@ -17,29 +18,36 @@ const Footer = () => {
   const quickLinks = t.links;
 
   const [branches, setBranches] = useState([]);
+  const [settings, setSettings] = useState(null);
 
   const socialLinks = [
-    { label: facebook, href: "#", title: "Facebook" },
-    { label: linkedin, href: "#", title: "LinkedIn" },
-    { label: whatsapp, href: "#", title: "WhatsApp" },
-    { label: youtube, href: "#", title: "YouTube" },
+    { label: facebook, title: "Facebook" },
+    { label: linkedin, title: "LinkedIn" },
+    { label: whatsapp, title: "WhatsApp" },
+    { label: youtube, title: "YouTube" },
   ];
-useEffect(() => {
- const fetchBranches = async () => {
-  const data = await api.getBranches();
-  console.log(data);
-  if (data.length > 0) {
-    setBranches(data);
-  } else {
-    console.error("Error fetching branches");
-    
-  }
-};
-fetchBranches();
-}, [lang]);
+  useEffect(() => {
+    const fetchBranches = async () => {
+      const data = await api.getBranches();
+      const settings = await api.getSettings();
+      setSettings(settings);
+      console.log(settings);
+
+      // console.log(data);
+      if (data.length > 0) {
+        setBranches(data);
+        // console.log(data);
+      } else {
+        console.error("Error fetching branches");
+      }
+    };
+    fetchBranches();
+  }, [lang]);
 
   return (
-    <footer dir={t.dir} className="text-white main pt-40 relative">
+    <footer
+      dir={t.dir}
+      className="text-white main pt-40 relative overflow-x-hidden">
       <div className="custom-shape-divider-top-1776366482">
         <svg
           data-name="Layer 1"
@@ -65,14 +73,22 @@ fetchBranches();
           </p>
 
           <div className="flex gap-5 justify-around md:justify-start mt-10">
-            {socialLinks.map(({ label, href, title }) => (
-              <Link
-                key={title}
-                to={href}
+            {socialLinks.map(({ label, title }, index) => (
+              <a
+                key={index}
+                href={
+                  settings
+                    ? title.toLowerCase() === "whatsapp"
+                      ? `https://wa.me/${settings["whatsapp_number"]}`
+                      : settings[`social_${title.toLowerCase()}`]
+                    : "#"
+                }
+                target="_blank"
+                rel="noopener noreferrer"
                 title={title}
                 className="w-12 h-12 flex items-center justify-center">
                 <img src={label} alt={title} className="w-full h-auto" />
-              </Link>
+              </a>
             ))}
           </div>
         </div>
@@ -105,32 +121,36 @@ fetchBranches();
             {f.contactInfo}
           </h3>
           <div className="info flex flex-col md:flex-row lg:flex-col gap-4">
-            {branches.map(
-              ({name, address, phone, email } , index) => (
-                <div key={index} className="mb-4 mx-5 flex flex-col gap-2">
-                  <p className="text-lg font-bold text-white/80 mb-2 flex items-center gap-2">
-                    for {name}
-                  </p>
+            {branches.map(({ name, address, phone, email }, index) => (
+              <div key={index} className="mb-4 mx-5 flex flex-col gap-2">
+                <p className="text-lg font-bold text-white/80 mb-2 flex items-center gap-2">
+                  {lang === "en" ? "for" : "ل"} {name}
+                </p>
 
-                  <div className="flex flex-col gap-2 text-md text-white/85">
-                    <div className="flex gap-2 items-start">
-                      <span>🏠</span>
-                      <span className="text-wrap">{address}</span>
-                    </div>
+                <div className="flex flex-col gap-2 text-md text-white/85">
+                  <div className="flex gap-2 items-start">
+                    <span>
+                      <FaMapMarkerAlt />
+                    </span>
+                    <span className="text-wrap">{address}</span>
+                  </div>
 
-                    <div className="flex gap-2 items-center">
-                      <span>📞</span>
-                      <span className="text-wrap">{phone}</span>
-                    </div>
+                  <div className="flex gap-2 items-center">
+                    <span>
+                      <FaPhoneAlt />
+                    </span>
+                    <span className="text-wrap">{phone}</span>
+                  </div>
 
-                    <div className="flex gap-2 items-center">
-                      <span>✉️</span>
-                      <span className="text-wrap">{email}</span>
-                    </div>
+                  <div className="flex gap-2 items-center">
+                    <span>
+                      <FaEnvelope />
+                    </span>
+                    <span className="text-wrap">{email}</span>
                   </div>
                 </div>
-              ),
-            )}
+              </div>
+            ))}
           </div>
         </div>
       </div>

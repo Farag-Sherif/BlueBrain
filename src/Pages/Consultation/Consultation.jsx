@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Title from "../../Components/Title/Title";
-import consultationVideo from "../../Assets/Video/landing.mp4";
+import consultationVideo from "../../assets/Video/landing.mp4";
 import { useLang } from "../../i18n/LanguageContext";
+import ScrollReveal from "../../Components/ScrollReveal/ScrollReveal";
 
 export default function Consultation() {
   const { t } = useLang();
@@ -10,31 +11,33 @@ export default function Consultation() {
   return (
     <>
       <Title>{c.pageTitle}</Title>
-
       <section className="container mx-auto my-10 px-5 pb-20">
         {/* VIDEO */}
-        <div className="relative mb-10 rounded-2xl overflow-hidden shadow-2xl">
-          <iframe
-            className="w-full h-[400px] md:h-[500px]"
-            src={consultationVideo}
-            title="Consultation Video"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
+        <ScrollReveal variant="fadeUp" delay="0ms">
+          <div className="relative mb-10 rounded-2xl overflow-hidden shadow-2xl">
+            <iframe
+              className="w-full h-[400px] md:h-[500px]"
+              src={consultationVideo}
+              title="Consultation Video"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        </ScrollReveal>
 
         {/* CONTENT */}
-        <div className="p-8 bg-white drop-shadow-2xl rounded-2xl mb-10">
-          <div className="flex items-center gap-2 mb-10">
-            <span className="text-2xl md:text-3xl lg:text-4xl">🎯</span>
-            <h2 className="text-lg md:text-2xl lg:text-3xl font-bold mainC">
-              {c.requestTitle}
-            </h2>
+        <ScrollReveal variant="fadeUp" delay="150ms">
+          <div className="p-8 bg-white drop-shadow-2xl rounded-2xl mb-10">
+            <div className="flex items-center gap-2 mb-10">
+              <span className="text-2xl md:text-3xl lg:text-4xl">🎯</span>
+              <h2 className="text-lg md:text-2xl lg:text-3xl font-bold mainC">
+                {c.requestTitle}
+              </h2>
+            </div>
+            <ConsultationForm />
           </div>
-
-          <ConsultationForm />
-        </div>
+        </ScrollReveal>
       </section>
     </>
   );
@@ -66,7 +69,6 @@ function ConsultationForm() {
         type: form.type,
         consultation: form.consultation,
       });
-      console.log(res);
       if (res.status) {
         setSent(true);
         setForm({ name: "", phone: "", type: "", consultation: "" });
@@ -95,7 +97,6 @@ function ConsultationForm() {
           onChange={handle("phone")}
         />
       </div>
-
       <div>
         <label className="block text-md font-semibold text-gray-700 mb-3">
           {c.typeLabel}
@@ -112,7 +113,6 @@ function ConsultationForm() {
           ))}
         </select>
       </div>
-
       <div>
         <label className="block text-md font-semibold text-gray-700 mb-3">
           {c.consultationLabel}
@@ -125,7 +125,6 @@ function ConsultationForm() {
           className="w-full border-2 border-indigo-200 rounded-md px-3 py-2 outline-none focus:border-indigo-600 resize-y"
         />
       </div>
-
       {sent ? (
         <p className="text-green-600 font-semibold text-center">
           {c.successMsg}

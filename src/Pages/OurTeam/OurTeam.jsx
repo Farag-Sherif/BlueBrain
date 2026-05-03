@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Title from "../../Components/Title/Title";
 import { useLang } from "../../i18n/LanguageContext";
 import Loading from "../../Components/Loading/Loading";
+import ScrollReveal from "../../Components/ScrollReveal/ScrollReveal";
 
 const BASE_URL = "https://dashbaord.bluebrain-co.com";
 
@@ -46,32 +47,35 @@ export default function OurTeam() {
         {!error && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {team.map((member, index) => (
-              <div
+              <ScrollReveal
                 key={index}
-                className="group rounded-xl overflow-hidden flex flex-col bg-[#dce8fb] hover:scale-105 transition duration-300 shadow-sm hover:shadow-lg">
-                <div className="relative bg-[#c8d9ef] h-72 w-full flex items-center justify-center overflow-hidden">
-                  {member.image ? (
-                    <img
-                      src={`${BASE_URL}/${member.image}`}
-                      alt={member.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => (e.target.style.display = "none")}
-                    />
-                  ) : (
-                    <div className="opacity-40">
-                      <PersonIcon />
-                    </div>
-                  )}
+                variant="fadeUp"
+                delay={`${(index % 4) * 80}ms`}>
+                <div className="group rounded-xl overflow-hidden flex flex-col hover:scale-105 transition duration-300 shadow-lg hover:shadow-xl">
+                  <div className="relative bg-[#c8d9ef] h-72 w-full flex items-center justify-center overflow-hidden">
+                    {member.image ? (
+                      <img
+                        src={`${BASE_URL}/${member.image}`}
+                        alt={member.name}
+                        className="w-full h-full object-cover"
+                        onError={(e) => (e.target.style.display = "none")}
+                      />
+                    ) : (
+                      <div className="opacity-40">
+                        <PersonIcon />
+                      </div>
+                    )}
+                  </div>
+                  <div className="px-4 pt-3 pb-4">
+                    <p className="text-lg font-bold tracking-wider uppercase mainC mb-1">
+                      {member.name}
+                    </p>
+                    <p className="text-sm font-semibold text-gray-500 mb-2">
+                      {member.position}
+                    </p>
+                  </div>
                 </div>
-                <div className="px-4 pt-3 pb-4">
-                  <p className="text-lg font-bold tracking-wider uppercase mainC mb-1">
-                    {member.name}
-                  </p>
-                  <p className="text-sm font-semibold text-gray-500 mb-2">
-                    {member.position}
-                  </p>
-                </div>
-              </div>
+              </ScrollReveal>
             ))}
           </div>
         )}

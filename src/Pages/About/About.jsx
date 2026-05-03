@@ -5,6 +5,7 @@ import Brain from "../../assets/Images/brainBlue.png";
 import Title from "../../Components/Title/Title";
 import { useLang } from "../../i18n/LanguageContext";
 import Loading from "../../Components/Loading/Loading";
+import ScrollReveal from "../../Components/ScrollReveal/ScrollReveal";
 
 export default function About() {
   const { t, api, lang } = useLang();
@@ -47,14 +48,18 @@ export default function About() {
             } -z-1`}
           />
           <div className="about px-5 container mx-auto flex flex-col-reverse md:flex-row items-center gap-10">
-            <div className="w-full md:w-1/2 h-fit">
+            <ScrollReveal
+              variant="fadeRight"
+              delay="100ms"
+              className="w-full md:w-1/2 h-fit">
               <img
                 src={strongBrain}
                 alt="brain"
                 className="w-full h-auto pt-10"
               />
-            </div>
-            <div className="flex-1">
+            </ScrollReveal>
+
+            <ScrollReveal variant="fadeLeft" delay="200ms" className="flex-1">
               <div className="flex items-center gap-2 mb-1">
                 <span>
                   <img
@@ -72,19 +77,23 @@ export default function About() {
                 {about?.about_description ??
                   `is your strategic partner for excellence and creativity in design and digital development. We provide visual identity, logo design, video ads, social media design, apps and websites. Founded in 2014, we have served over 200 clients across Egypt, Saudi Arabia, and beyond.`}
               </p>
-            </div>
+            </ScrollReveal>
           </div>
         </div>
 
         {/* FAQ */}
         {faq.length > 0 && (
           <div className="py-20 px-5 container mx-auto">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-indigo-900 mb-10">
-              {a.questionsTitle}
-            </h2>
+            <ScrollReveal variant="fadeUp">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-indigo-900 mb-10">
+                {a.questionsTitle}
+              </h2>
+            </ScrollReveal>
             <div className="flex flex-col gap-4">
               {faq.map((item, i) => (
-                <AccordionItem key={i} item={item} />
+                <ScrollReveal key={i} variant="fadeUp" delay={`${i * 80}ms`}>
+                  <AccordionItem item={item} />
+                </ScrollReveal>
               ))}
             </div>
           </div>
@@ -93,20 +102,25 @@ export default function About() {
         {/* PARTNERS */}
         {clients.length > 0 && (
           <div className="py-20 px-5 container mx-auto">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-indigo-900 mb-10 leading-tight whitespace-pre-line">
-              {a.partnersTitle}
-            </h2>
+            <ScrollReveal variant="fadeUp">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-indigo-900 mb-10 leading-tight whitespace-pre-line">
+                {a.partnersTitle}
+              </h2>
+            </ScrollReveal>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
               {clients.map((client, index) => (
-                <div
+                <ScrollReveal
                   key={index}
-                  className="flex items-center bg-[#125ef291] rounded-2xl justify-center">
-                  <img
-                    src={client.logo}
-                    alt={`Client ${index}`}
-                    className="w-full h-40 p-5 object-contain"
-                  />
-                </div>
+                  variant="zoomIn"
+                  delay={`${index * 60}ms`}>
+                  <div className="flex items-center bg-[#125df25e] rounded-2xl justify-center">
+                    <img
+                      src={client.logo}
+                      alt={`Client ${index}`}
+                      className="w-full h-40 p-5 object-contain"
+                    />
+                  </div>
+                </ScrollReveal>
               ))}
             </div>
           </div>
