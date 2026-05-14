@@ -50,7 +50,7 @@ const PartnersSuccess = () => {
                   key={index}
                   variant="zoomIn"
                   delay={`${(index % 5) * 80}ms`}>
-                  <div className="flex items-center bg-[#125df25e] rounded-2xl justify-center">
+                  <div className="flex items-center rounded-2xl justify-center">
                     <img
                       src={client.logo}
                       alt={`Client ${index}`}

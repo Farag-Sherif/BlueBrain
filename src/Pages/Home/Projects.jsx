@@ -8,11 +8,11 @@ function ProjectCard({ project, onWatch }) {
   const firstVideo = project.media?.find((m) => m.type === "video");
 
   return (
-    <div className="rounded-2xl overflow-hidden shadow-md">
+    <div className="rounded-2xl overflow-hidden shadow-xl">
       <img
         src={project.image}
         alt={project.title}
-        className="w-full h-52 object-contain py-5 bg-[#125df25e]"
+        className="w-full h-52 object-contain py-5"
       />
       <div className="flex justify-between items-center p-3">
         <span className="font-semibold secondC line-clamp-1">

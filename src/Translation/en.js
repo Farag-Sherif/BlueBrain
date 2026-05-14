@@ -120,7 +120,7 @@ const en = {
   services: {
     pageTitle: "OUR SERVICES",
     whatWeOffer: "What we offer:",
-    writeOffer: "Write Offer",
+    writeOffer: "Get Offer",
     submitOfferTitle: "Request a quote",
     offerLabel: "Offer",
     offerPlaceholder: "Describe your offer...",
@@ -187,6 +187,8 @@ const en = {
     inProgress: "⏳ In Progress",
     processTitle: "VIDEOS",
     designsTitle: "DESIGNS",
+    filesTitle: "FILES",
+    viewWebsite: "View Website",
     notFound: "Project not found.",
     loading: "Loading…",
   },

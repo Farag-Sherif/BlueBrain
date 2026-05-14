@@ -9,9 +9,9 @@ function ProjectCard({ project }) {
   return (
     <Link
       to={`/project-details/${project.id}`}
-      className="group block bg-white rounded-2xl h-full overflow-hidden border-2 border-transparent shadow-sm transition-all duration-300 hover:border-indigo-600 hover:shadow-lg">
-      <div className="relative h-60 bg-gray-300 flex items-center justify-center">
-        <div className="absolute inset-0 bg-indigo-500/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+      className="group block bg-white rounded-2xl h-full overflow-hidden border-2 border-transparent shadow-lg transition-all duration-300 hover:border-indigo-600 hover:shadow-xl">
+      <div className="relative h-60 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center bg-indigo-500/60 opacity-0 group-hover:opacity-100 transition-all duration-300">
           <div className="w-10 h-10 rounded-full border-2 border-white flex items-center justify-center text-white bg-white/20">
             ▶
           </div>
@@ -19,7 +19,7 @@ function ProjectCard({ project }) {
         <img
           src={project.image}
           alt={project.title}
-          className="w-full h-full object-contain py-5 bg-[#125df25e]"
+          className="w-full h-full object-contain py-5"
         />
       </div>
       <div className="p-4">

@@ -55,18 +55,18 @@ const ServicesSection = () => {
               {/* Service Image */}
               <ScrollReveal
                 variant={isEven ? "fadeRight" : "fadeLeft"}
-                delay="0ms">
+                delay="0ms" className="mb-5">
                 <img
                   src={svc.image}
                   alt={svc.title}
-                  className={`w-70 h-80 object-cover rounded-3xl mx-auto ${
+                  className={`w-70 h-90 object-cover rounded-3xl mx-auto ${
                     lang === "ar"
                       ? isEven
-                        ? "rotate-0 md:rotate-20"
-                        : "rotate-0 md:-rotate-20"
+                        ? "rotate-10 md:rotate-20"
+                        : "-rotate-10 md:-rotate-20"
                       : isEven
-                        ? "rotate-0 md:-rotate-20"
-                        : "rotate-0 md:rotate-20"
+                        ? "-rotate-10 md:-rotate-20"
+                        : "rotate-10 md:rotate-20"
                   }`}
                 />
               </ScrollReveal>
@@ -105,7 +105,7 @@ const ServicesSection = () => {
                       : isEven
                         ? "left-0"
                         : "right-0 md:right-20"
-                  } mt-3 w-full md:w-1/2 h-fit p-5 bg-white shadow-2xl rounded-2xl z-9999 md:px-10 block text-sm md:text-base secondC leading-relaxed max-h-0 opacity-0 hover:max-h-fit hover:opacity-100 transition-all duration-500 ease-in-out`}>
+                  } mt-3 w-full md:w-1/2 h-fit p-5 bg-white shadow-2xl rounded-2xl z-10 md:px-10 block text-sm md:text-base secondC leading-relaxed max-h-0 opacity-0 hover:max-h-fit hover:opacity-100 transition-all duration-500 ease-in-out`}>
                   {svc.description}
                 </span>
 

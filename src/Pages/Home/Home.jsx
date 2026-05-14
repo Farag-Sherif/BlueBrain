@@ -3,7 +3,7 @@ import landingModileVideo from "../../assets/Video/landingMobile.mp4";
 import volume from "../../assets/Video/volume.png";
 import mute from "../../assets/Video/mute.png";
 import whatsapp from "../../assets/Social-Icons/coloredwhatsapp.png";
-import strongBrain from "../../assets/Images/Home/strongbrain.png";
+import strongBrain from "../../assets/Images/Home/StrongBrain.png";
 import curve from "../../assets/Images/Home/upCurve.png";
 import blueBrain from "../../assets/Images/whiteBrain.png";
 import brain from "../../assets/Images/brainBlue.png";
@@ -18,7 +18,7 @@ import ScrollReveal from "../../Components/ScrollReveal/ScrollReveal";
 
 const Home = () => {
   const [isMuted, setIsMuted] = useState(true);
-  const { t, api } = useLang();
+  const { t, api, lang } = useLang();
   const h = t.home;
   const [settings, setSettings] = useState(null);
   useEffect(() => {
@@ -28,7 +28,7 @@ const Home = () => {
       // console.log(data)
     };
     fetchData();
-  }, []);
+  }, [lang]);
 
   const toggleSound = () => setIsMuted(!isMuted);
 
@@ -76,7 +76,7 @@ const Home = () => {
       </div>
 
       {/* EXPERIENCE SECTION */}
-      <div className="ex flex flex-col md:flex-row items-center justify-center md:gap-10 relative lg:min-h-screen mt-20 overflow-x-hidden">
+      <div className="ex flex flex-col md:flex-row items-center justify-center md:gap-10 relative lg:min-h-screen mt-20 overflow-hidden">
         <img
           src={curve}
           alt="curve"

@@ -243,7 +243,7 @@ export default function OurServices() {
           src={serviceTitleBG}
           alt=""
           aria-hidden="true"
-          className={`absolute -top-20 w-full md:w-1/2 opacity-30 -z-10 ${lang === "ar" ? "left-0 scale-x-[-1]" : "right-0"}`}
+          className={`hidden md:block absolute -top-20 w-full md:w-1/2 opacity-30 -z-10 ${lang === "ar" ? "left-0 scale-x-[-1]" : "right-0"}`}
         />
 
         <div className="container mx-auto pt-10 px-5">

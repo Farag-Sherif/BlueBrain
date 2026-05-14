@@ -113,7 +113,7 @@ export default function About() {
                   key={index}
                   variant="zoomIn"
                   delay={`${index * 60}ms`}>
-                  <div className="flex items-center bg-[#125df25e] rounded-2xl justify-center">
+                  <div className="flex items-center rounded-2xl justify-center">
                     <img
                       src={client.logo}
                       alt={`Client ${index}`}
@@ -141,8 +141,9 @@ function AccordionItem({ item }) {
         <span className="text-white text-xs">{open ? "▲" : "▼"}</span>
       </div>
       {open && (
-        <p className="mt-3 text-sm text-white/80 leading-relaxed">
-          {item.answer}
+       <p className="mt-3 text-sm text-white/80 leading-relaxed">
+          <div dangerouslySetInnerHTML={{ __html: item.answer }} />
+          
         </p>
       )}
     </div>

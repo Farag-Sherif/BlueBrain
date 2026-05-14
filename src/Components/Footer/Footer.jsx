@@ -7,7 +7,6 @@ import saudi from "../../assets/Images/saudi.png";
 import facebook from "../../assets/Social-Icons/facebook.png";
 import linkedin from "../../assets/Social-Icons/linkedin.png";
 import whatsapp from "../../assets/Social-Icons/whatsapp.png";
-import youtube from "../../assets/Social-Icons/youtube.png";
 import "./Footer.css";
 import { use, useEffect, useState } from "react";
 import { FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
@@ -24,7 +23,6 @@ const Footer = () => {
     { label: facebook, title: "Facebook" },
     { label: linkedin, title: "LinkedIn" },
     { label: whatsapp, title: "WhatsApp" },
-    { label: youtube, title: "YouTube" },
   ];
   useEffect(() => {
     const fetchBranches = async () => {
@@ -96,7 +94,7 @@ const Footer = () => {
         {/* Links */}
         <div>
           <h3 className="text-xl font-bold mb-5 tracking-wide flex items-center">
-            <img src={brain} alt="" className="w-5 h-5 mr-2" /> {f.quickLinks}
+            <img src={brain} alt="" className="w-8 h-auto mr-2" /> {f.quickLinks}
           </h3>
 
           <ul className="flex flex-col gap-2 mx-5">
@@ -117,7 +115,7 @@ const Footer = () => {
         {/* Contact */}
         <div className="md:col-span-2 lg:col-span-1 mt-10 lg:mt-0">
           <h3 className="text-xl font-bold mb-4 tracking-wide flex items-center">
-            <img src={brain} alt="" className="w-5 h-5 mr-2" />
+            <img src={brain} alt="" className="w-8 h-auto mr-2" />
             {f.contactInfo}
           </h3>
           <div className="info flex flex-col md:flex-row lg:flex-col gap-4">

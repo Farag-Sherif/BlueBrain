@@ -120,7 +120,7 @@ const ar = {
   services: {
     pageTitle: "خدماتنا",
     whatWeOffer: "ما نقدمه:",
-    writeOffer: "اكتب عرضك",
+    writeOffer: "احصل علي عرض",
     submitOfferTitle: "اطلب عرض سعر ",
     offerLabel: "العرض",
     offerPlaceholder: "اوصف عرضك...",
@@ -185,6 +185,8 @@ const ar = {
     inProgress: "⏳ قيد التنفيذ",
     processTitle: "فيديوهات",
     designsTitle: "تصميمات",
+    filesTitle: "ملفات",
+    viewWebsite: "عرض الموقع",
     notFound: "المشروع غير موجود.",
     loading: "جارٍ التحميل…",
   },

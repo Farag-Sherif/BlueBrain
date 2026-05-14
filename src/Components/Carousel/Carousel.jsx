@@ -42,7 +42,7 @@ export default function Carousel({ children }) {
   const offset = index * (cardWidth + GAP);
 
   return (
-    <div>
+    <div dir="ltr">
       <div className="relative flex items-center">
         {/* Left */}
         <button

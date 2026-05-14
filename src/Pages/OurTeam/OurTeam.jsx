@@ -55,9 +55,9 @@ export default function OurTeam() {
                   <div className="relative bg-[#c8d9ef] h-72 w-full flex items-center justify-center overflow-hidden">
                     {member.image ? (
                       <img
-                        src={`${BASE_URL}/${member.image}`}
+                        src={member.image}
                         alt={member.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover object-top"
                         onError={(e) => (e.target.style.display = "none")}
                       />
                     ) : (
