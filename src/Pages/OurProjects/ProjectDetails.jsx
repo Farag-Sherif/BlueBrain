@@ -7,7 +7,7 @@ import ScrollReveal from "../../Components/ScrollReveal/ScrollReveal";
 
 const VideoCard = ({ item, onPlay }) => (
   <div className="group bg-white rounded-2xl overflow-hidden shadow-md">
-    <div className="relative h-60 cursor-pointer" onClick={() => onPlay(item)}>
+    <div className="relative h-100 cursor-pointer" onClick={onPlay}>
       <video
         src={`${item.file}#t=0.1`}
         className="w-full h-full object-cover"
@@ -23,41 +23,8 @@ const VideoCard = ({ item, onPlay }) => (
   </div>
 );
 
-const extIcons = {
-  pdf: "📄",
-  docx: "📝",
-  doc: "📝",
-  xlsx: "📊",
-  xls: "📊",
-  pptx: "📊",
-  ppt: "📊",
-  zip: "🗜️",
-  rar: "🗜️",
-  mp4: "🎬",
-  mov: "🎬",
-  mp3: "🎵",
-  default: "📁",
-};
-
-const extColors = {
-  pdf: "mainC bg-red-50 hover:bg-red-100",
-  docx: "text-blue-600 bg-blue-50 hover:bg-blue-100",
-  doc: "text-blue-600 bg-blue-50 hover:bg-blue-100",
-  xlsx: "text-green-600 bg-green-50 hover:bg-green-100",
-  xls: "text-green-600 bg-green-50 hover:bg-green-100",
-  pptx: "text-orange-600 bg-orange-50 hover:bg-orange-100",
-  ppt: "text-orange-600 bg-orange-50 hover:bg-orange-100",
-  zip: "text-purple-600 bg-purple-50 hover:bg-purple-100",
-  rar: "text-purple-600 bg-purple-50 hover:bg-purple-100",
-  default: "text-indigo-600 bg-indigo-50 hover:bg-indigo-100",
-};
-
 function getExt(url) {
   return url.split("?")[0].split(".").pop().toLowerCase();
-}
-
-function isImageExt(ext) {
-  return ["jpg", "jpeg", "png", "webp", "gif", "svg"].includes(ext);
 }
 
 export default function ProjectDetails() {
@@ -67,16 +34,15 @@ export default function ProjectDetails() {
 
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [video, setVideo] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedPDF, setSelectedPDF] = useState(null);
+  const [selectedVideoIndex, setSelectedVideoIndex] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState(null);
 
   useEffect(() => {
     const fetchProject = async () => {
       setLoading(true);
-      const data = await api.getProjectDetails(id);
-      console.log(data);
-      setProject(data[0]);
+      const data = await api.getProjects();
+      const found = data.find((p) => String(p.id) === String(id));
+      setProject(found ?? null);
       setLoading(false);
     };
     fetchProject();
@@ -84,41 +50,25 @@ export default function ProjectDetails() {
 
   const videos = project?.media?.filter((m) => m.type === "video") ?? [];
   const images = project?.media?.filter((m) => m.type === "image") ?? [];
-  const files = project?.media?.filter((m) => m.type === "file") ?? [];
-  
+  const files  = project?.media?.filter((m) => m.type === "file")  ?? [];
+
   const downloadableFile =
-    files.find((f) => {
-      const ext = getExt(f.file);
-      return ["zip", "rar", "pdf", "docx", "doc"].includes(ext);
-    }) || null;
-  
+    files.find((f) => ["zip", "rar", "pdf", "docx", "doc"].includes(getExt(f.file))) || null;
+
   const handleDownload = (url) => {
     const link = document.createElement("a");
-
     link.href = url;
-
-    // اسم الملف
-    link.setAttribute(
-      "download",
-      url.split("/").pop()?.split("?")[0] || "file"
-    );
-
-    // مهم
+    link.setAttribute("download", url.split("/").pop()?.split("?")[0] || "file");
     link.setAttribute("target", "_blank");
-
     document.body.appendChild(link);
-
     link.click();
-
     link.remove();
   };
-  
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <span className="text-indigo-900 text-xl font-bold animate-pulse">
-          {p.loading}
-        </span>
+        <span className="text-indigo-900 text-xl font-bold animate-pulse">{p.loading}</span>
       </div>
     );
   }
@@ -139,8 +89,7 @@ export default function ProjectDetails() {
           <img
             src={projectTitleBG}
             alt=""
-            className={`absolute bottom-0 ${lang === "ar" ? "left-0 scale-x-[-1]" : "right-0"
-              } w-full md:w-1/2 h-1/2 md:h-auto`}
+            className={`absolute bottom-0 ${lang === "ar" ? "left-0 scale-x-[-1]" : "right-0"} w-full md:w-1/2 h-1/2 md:h-auto`}
           />
           <div className="container mx-auto px-5 flex flex-col md:flex-row items-center justify-between gap-6">
             <img
@@ -149,7 +98,7 @@ export default function ProjectDetails() {
               className="w-64 h-64 object-contain p-5 rounded-xl mb-15 mx-auto"
             />
             <div className="flex flex-col gap-3 items-center relative md:w-1/2 mb-15 md:mb-0 mt-15 lg:mt-0">
-              <span className="text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+              <span className="text-2xl md:text-3xl lg:text-4xl font-bold text-white main lg:w-1/2">
                 {project.client}
               </span>
             </div>
@@ -157,113 +106,89 @@ export default function ProjectDetails() {
         </div>
       </ScrollReveal>
 
-      {/* STATUS */}
-      <ScrollReveal variant="fadeUp" delay="100ms">
-        <div className="container mx-auto px-5 mb-32">
+      {/* STATUS CARD */}
+    <ScrollReveal variant="fadeUp" delay="100ms">
+  <div className="container mx-auto px-5 mb-20">
+    <div className="bg-white border border-gray-100 rounded-2xl p-5 md:p-6 space-y-4 shadow-sm">
 
-          <div className="relative overflow-hidden rounded-[40px] bg-white border border-gray-100 shadow-[0_20px_80px_rgba(79,70,229,0.12)]">
+      {/* ROW 1 — status + title + meta */}
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${
+            project.status === "completed"
+              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+              : "bg-amber-50 text-amber-700 border-amber-200"}`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${
+              project.status === "completed" ? "bg-emerald-500" : "bg-amber-500"}`} />
+            {project.status === "completed" ? p.completed : p.inProgress}
+          </span>
+          <h1 className="text-base md:text-lg font-semibold text-gray-900">{project.title}</h1>
+        </div>
 
-            {/* Glow */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/10 blur-3xl rounded-full" />
-            <div className="absolute bottom-0 left-0 w-80 h-80 bg-pink-500/10 blur-3xl rounded-full" />
-
-            <div className="relative p-10 lg:p-14 space-y-10">
-
-              {/* STATUS */}
-              <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium backdrop-blur-xl border ${project.status === "completed"
-                  ? "bg-emerald-500/15 text-emerald-700 border-emerald-400/20"
-                  : "bg-amber-500/15 text-amber-700 border-amber-400/20"
-                }`}>
-                <span className={`w-2.5 h-2.5 rounded-full ${project.status === "completed"
-                    ? "bg-emerald-500 animate-pulse"
-                    : "bg-amber-500 animate-pulse"
-                  }`} />
-                {project.status === "completed" ? p.completed : p.inProgress}
-              </div>
-
-              {/* TITLE */}
-              <div>
-                <h1 className="text-4xl md:text-5xl font-black text-gray-900 mb-5">
-                  {project.title}
-                </h1>
-
-                <p className="text-gray-600 leading-relaxed text-lg max-w-3xl">
-                  {project.description}
-                </p>
-              </div>
-
-              {/* CLIENT + DATE */}
-              <div className="flex flex-col sm:flex-row gap-6 p-5 rounded-2xl bg-gray-50 border border-gray-100 w-fit">
-
-                <div>
-                  <p className="text-xs text-gray-400">Client</p>
-                  <p className="font-semibold text-gray-900">{project.client}</p>
-                </div>
-
-                <div className="hidden sm:block w-px h-10 bg-gray-200" />
-
-                <div>
-                  <p className="text-xs text-gray-400">End Date</p>
-                  <p className="font-semibold text-gray-900">{project.end_date}</p>
-                </div>
-
-              </div>
-
-              {/* TAGS */}
-              <div className="flex flex-wrap gap-3">
-                {project.tags?.map((tag) => (
-                  <span
-                    key={tag.id}
-                    className="px-4 py-2 rounded-2xl border text-sm font-medium transition hover:-translate-y-1"
-                    style={{
-                      color: tag.color,
-                      backgroundColor: `${tag.color}10`,
-                      borderColor: `${tag.color}25`,
-                    }}
-                  >
-                    {tag.name}
-                  </span>
-                ))}
-              </div>
-
-              {/* BUTTONS */}
-              <div className="flex flex-col sm:flex-row gap-4 pt-3">
-
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex-1 bg-indigo-600 text-white py-4 rounded-2xl font-semibold text-center hover:scale-[1.02] transition"
-                >
-                  {lang === "ar" ? "زيارة الموقع" : "Visit Website"}
-                </a>
-
-                {downloadableFile && (
-                  <button
-                    onClick={() => handleDownload(downloadableFile.file)}
-                    className="flex-1 border border-gray-200 py-4 rounded-2xl font-semibold hover:bg-gray-50 transition"
-                  >
-                    {lang === "ar" ? "تحميل الملف" : "Download File"}
-                  </button>
-                )}
-
-              </div>
-
-            </div>
+        <div className="flex items-center gap-3 text-xs">
+          <div>
+            <p className="text-gray-400 mb-0.5">{lang === "ar" ? "عميل" : "Client"}</p>
+            <p className="font-semibold text-gray-800">{project.client}</p>
+          </div>
+          <div className="w-px h-4 bg-gray-200" />
+          <div>
+            <p className="text-gray-400 mb-0.5">{lang === "ar" ? "تاريخ الانتهاء" : "End Date"}</p>
+            <p className="font-semibold text-gray-800">{project.end_date}</p>
           </div>
         </div>
-      </ScrollReveal>
+      </div>
+
+      {/* DESCRIPTION */}
+      <p className="text-sm text-gray-500 leading-relaxed">{project.description}</p>
+
+      {/* TAGS */}
+      <div className="flex flex-wrap gap-2">
+        {project.tags?.map((tag) => (
+          <span
+            key={tag.id}
+            className="px-3 py-1 rounded-full border text-xs font-medium"
+            style={{ color: tag.color, backgroundColor: `${tag.color}12`, borderColor: `${tag.color}30` }}>
+            {tag.name}
+          </span>
+        ))}
+      </div>
+
+      {/* BUTTONS */}
+      <div className="flex items-center gap-2 pt-1 border-t border-gray-100 flex-wrap">
+        <a
+          href={project.link}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-1.5 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-xl hover:bg-indigo-700 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+          {lang === "ar" ? "زيارة الموقع" : "Visit Website"}
+        </a>
+        {downloadableFile && (
+          <button
+            onClick={() => handleDownload(downloadableFile.file)}
+            className="inline-flex items-center gap-1.5 px-4 py-2 border border-gray-200 text-sm font-medium rounded-xl hover:bg-gray-50 transition text-gray-700">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            {lang === "ar" ? "تحميل الملف" : "Download File"}
+          </button>
+        )}
+      </div>
+
+    </div>
+  </div>
+</ScrollReveal>
 
       {/* VIDEO CAROUSEL */}
       {videos.length > 0 && (
         <ScrollReveal variant="fadeUp" delay="0ms">
           <div className="container mx-auto px-5 pb-20">
-            <h2 className="text-4xl font-extrabold text-indigo-900 mb-10">
-              {p.processTitle}
-            </h2>
+            <h2 className="text-4xl font-extrabold text-indigo-900 mb-10">{p.processTitle}</h2>
             <Carousel>
               {videos.map((v, i) => (
-                <VideoCard key={i} item={v} onPlay={setVideo} />
+                <VideoCard key={i} item={v} onPlay={() => setSelectedVideoIndex(i)} />
               ))}
             </Carousel>
           </div>
@@ -274,19 +199,17 @@ export default function ProjectDetails() {
       {images.length > 0 && (
         <ScrollReveal variant="fadeUp" delay="0ms">
           <div className="container mx-auto px-5 pb-20">
-            <h2 className="text-4xl font-extrabold text-indigo-900 mb-10">
-              {p.designsTitle}
-            </h2>
+            <h2 className="text-4xl font-extrabold text-indigo-900 mb-10">{p.designsTitle}</h2>
             <Carousel>
               {images.map((img, i) => (
                 <div
                   key={i}
                   className="group relative rounded-xl overflow-hidden shadow-md cursor-pointer"
-                  onClick={() => setSelectedImage(img)}>
+                  onClick={() => setSelectedIndex(i)}>
                   <img
                     src={img.file}
                     alt={`design-${i}`}
-                    className="w-full h-80 lg:h-75 object-cover group-hover:opacity-80 transition-opacity duration-300"
+                    className="w-full h-90 lg:h-100 object-cover group-hover:opacity-80 transition-opacity duration-300"
                   />
                   <div className="absolute inset-0 bg-indigo-500/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                     <span className="text-white text-sm font-semibold">
@@ -301,43 +224,101 @@ export default function ProjectDetails() {
       )}
 
       {/* VIDEO MODAL */}
-      {video && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+      {selectedVideoIndex !== null && (
+        <div
+          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+          onClick={() => setSelectedVideoIndex(null)}>
+
+          {/* زرار قفل */}
           <button
-            onClick={() => setVideo(null)}
-            className="absolute top-5 right-5 text-white text-3xl">
+            onClick={() => setSelectedVideoIndex(null)}
+            className="absolute top-5 right-5 text-white text-3xl z-10">
             ✕
           </button>
-          <div className="w-[90%] md:w-[70%] aspect-video bg-black rounded-lg overflow-hidden">
+
+          {/* سهم يسار */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedVideoIndex((prev) => (prev - 1 + videos.length) % videos.length);
+            }}
+            className="absolute left-4 text-white text-5xl transition rounded-full w-14 h-14 flex items-center justify-center z-10">
+            ‹
+          </button>
+
+          {/* الفيديو */}
+          <div
+            className="w-[80%] md:w-[70%] aspect-video bg-black rounded-lg overflow-hidden"
+            onClick={(e) => e.stopPropagation()}>
             <video
+              key={selectedVideoIndex}
               className="w-full h-full"
-              src={video.file}
+              src={videos[selectedVideoIndex].file}
               controls
               autoPlay
             />
           </div>
+
+          {/* سهم يمين */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedVideoIndex((prev) => (prev + 1) % videos.length);
+            }}
+            className="absolute right-4 text-white text-5xl transition rounded-full w-14 h-14 flex items-center justify-center z-10">
+            ›
+          </button>
+
+          {/* عداد */}
+          <span className="absolute bottom-5 text-white/70 text-sm">
+            {selectedVideoIndex + 1} / {videos.length}
+          </span>
+
         </div>
       )}
 
       {/* IMAGE MODAL */}
-      {selectedImage && (
+      {selectedIndex !== null && (
         <div
           className="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
-          onClick={() => setSelectedImage(null)}>
+          onClick={() => setSelectedIndex(null)}>
+
           <button
-            onClick={() => setSelectedImage(null)}
+            onClick={() => setSelectedIndex(null)}
             className="absolute top-5 right-5 text-white text-3xl z-10">
             ✕
           </button>
-          <div
-            className="max-w-[90%] max-h-[90vh]"
-            onClick={(e) => e.stopPropagation()}>
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedIndex((prev) => (prev - 1 + images.length) % images.length);
+            }}
+            className="absolute left-4 text-white text-5xl transition rounded-full w-14 h-14 flex items-center justify-center z-10">
+            ‹
+          </button>
+
+          <div className="max-w-[80%] max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
             <img
-              src={selectedImage.file}
+              src={images[selectedIndex].file}
               alt="preview"
               className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
             />
           </div>
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedIndex((prev) => (prev + 1) % images.length);
+            }}
+            className="absolute right-4 text-white text-5xl transition rounded-full w-14 h-14 flex items-center justify-center z-10">
+            ›
+          </button>
+
+          <span className="absolute bottom-5 text-white/70 text-sm">
+            {selectedIndex + 1} / {images.length}
+          </span>
+
         </div>
       )}
     </section>

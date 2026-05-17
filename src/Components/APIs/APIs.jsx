@@ -70,7 +70,6 @@ export const createApi = (lang = "en") => ({
   getClients: () => get("/api/clients", lang, []),
   getFaq: () => get("/api/faqs", lang, []),
   getSettings: () => getOne("/api/settings", lang, null),
-  getProjectDetails: (id) => getOne(`/api/projects?tag_id=${id}`, lang, null),
 
   sendContact: (data) => post("/api/contact", data, lang),
   sendConsultation: (data) => post("/api/consultation", data, lang),

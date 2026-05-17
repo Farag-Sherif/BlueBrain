@@ -26,14 +26,14 @@ function ProjectCard({ project }) {
         <h3 className="font-bold text-sm md:text-md lg:text-lg mb-1 mainC group-hover:text-indigo-700 transition">
           {project.title}
         </h3>
-        <p className="text-xs text-gray-500 leading-relaxed mb-3">
+        <p className="text-xs text-gray-500 leading-relaxed mb-3  line-clamp-2">
           {project.description}
         </p>
         <div className="flex flex-wrap gap-1">
           {project.tags.map((tag, i) => (
             <span
               key={i}
-              className={`text-sm bg-indigo-100 ${tag.color} px-4 py-1 rounded-xl`}>
+              className={`text-sm bg-indigo-100 ${tag.color} px-4 py-1 rounded-xl  line-clamp-1`}>
               {tag.name}
             </span>
           ))}
