@@ -187,7 +187,7 @@ export default function About() {
               {/* Row 1 */}
               <div
                 className="flex w-max gap-6 animate-marquee"
-                style={{ animationDuration: "50s" }}>
+                style={{ animationDuration: "100s" }}>
                 {[
                   ...clients,
                   ...clients,
@@ -211,7 +211,7 @@ export default function About() {
               {/* Row 2 */}
               <div
                 className="flex w-max gap-6 animate-marquee-reverse"
-                style={{ animationDuration: "50s" }}>
+                style={{ animationDuration: "100s" }}>
                 {[
                   ...clients,
                   ...clients,

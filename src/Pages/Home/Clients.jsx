@@ -36,7 +36,7 @@ export default function PartnersSuccess() {
         {/* Row 1: Left */}
         <div
           className="flex w-max gap-6 animate-marquee"
-          style={{ animationDuration: "50s" }}>
+          style={{ animationDuration: "100s" }}>
           {[
             ...clients,
             ...clients,
@@ -60,7 +60,7 @@ export default function PartnersSuccess() {
         {/* Row 2: Right */}
         <div
           className="flex w-max gap-6 animate-marquee-reverse"
-          style={{ animationDuration: "50s" }}>
+          style={{ animationDuration: "100s" }}>
           {[
             ...clients,
             ...clients,
