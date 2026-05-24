@@ -1,70 +1,89 @@
-import React, { useEffect, useState } from "react";
-import { useLang } from "../../i18n/LanguageContext";
 import ScrollReveal from "../../Components/ScrollReveal/ScrollReveal";
+import { useEffect, useState } from "react";
+import { useLang } from "../../i18n/LanguageContext";
 
-const PartnersSuccess = () => {
-  const { t, lang, api } = useLang();
-  const h = t.home;
+export default function PartnersSuccess() {
+  const { api, t } = useLang();
   const [clients, setClients] = useState([]);
 
   useEffect(() => {
-    const fetchServices = async () => {
+    const fetchClients = async () => {
       const data = await api.getClients();
-      if (data.length > 0) {
-        setClients(data);
-      } else {
-        setClients(h.services);
-      }
+      console.log("Fetched Clients:", data);
+      setClients(data);
     };
-    fetchServices();
-  }, [lang]);
+    fetchClients();
+  }, []);
+
+  if (!clients || clients.length === 0) return null;
 
   return (
-    <section className="bg-white py-20 px-6 overflow-hidden">
-      <div className="container mx-auto">
-        {/* Title */}
-        <ScrollReveal variant="fadeUp">
-          <div className="title flex items-center gap-5 mb-10">
-            <span className="w-5 h-5 main rounded-full block"></span>
-            <h1 className="text-4xl md:text-6xl font-bold secondC uppercase">
-              {h.clientsTitle}
-            </h1>
-            {/* <span className="w-30 h-[4px] main rounded-full block"></span> */}
-          </div>
-        </ScrollReveal>
-
-        {/* Grid Container */}
-        <div className="relative">
-          {/* Vertical Lines Background */}
-          <div className="absolute inset-0 grid grid-cols-5 gap-4 pointer-events-none">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="h-full border-r border-white/70" />
-            ))}
-          </div>
-
-          {/* Client Logos */}
-          <div className="space-y-6 relative z-10">
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {clients.map((client, index) => (
-                <ScrollReveal
-                  key={index}
-                  variant="zoomIn"
-                  delay={`${(index % 5) * 80}ms`}>
-                  <div className="flex items-center rounded-2xl justify-center">
-                    <img
-                      src={client.logo}
-                      alt={`Client ${index}`}
-                      className="w-auto h-40 p-5 object-contain"
-                    />
-                  </div>
-                </ScrollReveal>
-              ))}
-            </div>
-          </div>
+    <section className="py-24 container mx-auto px-4 relative overflow-hidden">
+      <ScrollReveal variant="fadeUp">
+        <div className="flex items-center justify-center gap-4 mb-16 text-center">
+          <div className="w-12 h-[2px] bg-blue-200"></div>
+          <h2 className="font-display text-4xl md:text-5xl font-bold mainC uppercase tracking-wide px-4">
+            {t.home.clientsTitle}
+          </h2>
+          <div className="w-12 h-[2px] bg-blue-200"></div>
         </div>
+      </ScrollReveal>
+
+      {/* Modern Scrolling layout */}
+      <div
+        className="relative w-full overflow-hidden marquee-container flex flex-col gap-6"
+        dir="ltr">
+        {/* Row 1: Left */}
+        <div
+          className="flex w-max gap-6 animate-marquee"
+          style={{ animationDuration: "50s" }}>
+          {[
+            ...clients,
+            ...clients,
+            ...clients,
+            ...clients,
+            ...clients,
+            ...clients,
+          ].map((c, i) => (
+            <div
+              key={`row1-${i}`}
+              className="w-48 lg:w-56 shrink-0 group aspect-[3/2] rounded-2xl bg-white border border-slate-100 flex items-center justify-center p-6 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1">
+              <img
+                src={c.logo}
+                alt={c.name}
+                className="max-w-full max-h-full object-contain filter grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110"
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Row 2: Right */}
+        <div
+          className="flex w-max gap-6 animate-marquee-reverse"
+          style={{ animationDuration: "50s" }}>
+          {[
+            ...clients,
+            ...clients,
+            ...clients,
+            ...clients,
+            ...clients,
+            ...clients,
+          ].map((c, i) => (
+            <div
+              key={`row2-${i}`}
+              className="w-48 lg:w-56 shrink-0 group aspect-[3/2] rounded-2xl bg-white border border-slate-100 flex items-center justify-center p-6 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1">
+              <img
+                src={c.logo}
+                alt={c.name}
+                className="max-w-full max-h-full object-contain filter grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110"
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Background Decorative Blur */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-40 bg-blue-50 blur-3xl -z-10 rounded-full"></div>
       </div>
     </section>
   );
-};
-
-export default PartnersSuccess;
+}

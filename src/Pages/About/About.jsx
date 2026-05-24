@@ -1,20 +1,46 @@
-import { useEffect, useState } from "react";
-import strongBrain from "../../assets/Images/Home/StrongBrain.png";
-import curve from "../../assets/Images/Home/serviceTitleBG.png";
-import Brain from "../../assets/Images/brainBlue.png";
 import Title from "../../Components/Title/Title";
+import { useEffect, useState } from "react";
+import StrongBrain from "../../assets/Images/Home/StrongBrain.png";
+import serviceTitleBG from "../../assets/Images/Home/serviceTitleBG.png";
+import brainBlue from "../../assets/Images/Home/BlueBrain.png";
 import { useLang } from "../../i18n/LanguageContext";
 import Loading from "../../Components/Loading/Loading";
 import ScrollReveal from "../../Components/ScrollReveal/ScrollReveal";
 
+const AccordionItem = ({ title, content, isOpen, onClick }) => {
+  return (
+    <div className={`border rounded-2xl mb-4 transition-all duration-300 overflow-hidden ${isOpen ? 'border-blue-500 shadow-md bg-blue-50/30' : 'border-slate-200 bg-white hover:border-blue-300'}`}>
+      <button
+        onClick={onClick}
+        className="flex justify-between items-center w-full px-6 py-5 text-left rtl:text-right"
+      >
+        <span className={`font-bold text-lg transition-colors duration-300 mainC`}>
+          {title}
+        </span>
+        <span className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${isOpen ? 'bg-blue-600 text-white rotate-180' : 'bg-slate-100 text-slate-500'}`}>
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isOpen ? "M5 15l7-7 7 7" : "M19 9l-7 7-7-7"} />
+          </svg>
+        </span>
+      </button>
+      <div 
+        className={`transition-all duration-500 ease-in-out px-6 ${isOpen ? 'max-h-96 pb-5 opacity-100' : 'max-h-0 opacity-0 overflow-hidden py-0'}`}
+      >
+        <div className="text-slate-600 leading-relaxed" dangerouslySetInnerHTML={{ __html: content }} />
+      </div>
+    </div>
+  );
+};
+
 export default function About() {
-  const { t, api, lang } = useLang();
+  const { lang, t, api } = useLang();
   const a = t.about;
 
   const [clients, setClients] = useState([]);
   const [faq, setFaq] = useState([]);
   const [about, setAbout] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [openFaq, setOpenFaq] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -24,8 +50,8 @@ export default function About() {
         api.getFaq(),
         api.getSettings(),
       ]);
-      setClients(clientsData.length > 0 ? clientsData : []);
-      setFaq(faqData);
+      if (clientsData?.length) setClients(clientsData);
+      if (faqData?.length) setFaq(faqData);
       if (settingsData) setAbout(settingsData);
       setLoading(false);
     };
@@ -35,116 +61,179 @@ export default function About() {
   if (loading) return <Loading />;
 
   return (
-    <div className="relative">
+    <div className="bg-[var(--surface-alt)] min-h-screen">
       <Title>{a.pageTitle}</Title>
-      <section className="pb-20">
-        {/* WHO WE ARE */}
-        <div className="relative">
-          <img
-            src={curve}
-            alt="curve"
-            className={`w-full md:w-1/2 h-auto absolute bottom-0 md:translate-y-0 md:bottom-0 ${
-              lang === "ar" ? "right-0" : "left-0 scale-x-[-1]"
-            } -z-1`}
-          />
-          <div className="about px-5 container mx-auto flex flex-col-reverse md:flex-row items-center gap-10">
-            <ScrollReveal
-              variant="fadeRight"
-              delay="100ms"
-              className="w-full md:w-1/2 h-fit">
-              <img
-                src={strongBrain}
-                alt="brain"
-                className="w-full h-auto pt-10"
-              />
-            </ScrollReveal>
 
-            <ScrollReveal variant="fadeLeft" delay="200ms" className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <span>
+      {/* ─── WHO WE ARE SECTION ─── */}
+      <section className="container mx-auto px-4 mb-32">
+        <div className="flex flex-col lg:flex-row items-center gap-16">
+          <ScrollReveal variant="fadeRight" className="w-full lg:w-5/12">
+            <div className="relative group">
+              {/* Decorative backgrounds */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-[3rem] transform rotate-3 scale-105 opacity-10 transition-transform duration-500 group-hover:rotate-6"></div>
+              <div className="bg-white rounded-[3rem] p-10 flex flex-col items-center justify-center relative shadow-xl overflow-hidden border border-white">
+                <img
+                  src={serviceTitleBG}
+                  alt=""
+                  className={`absolute -top-10 -right-10 w-64 opacity-10 ${lang === "ar" ? "scale-x-[-1] -left-10 right-auto" : ""}`}
+                />
+                <div className="w-48 h-48 rounded-full bg-blue-50 flex items-center justify-center mb-8 relative z-10">
+                  <div className="absolute inset-0 rounded-full border-2 border-blue-200 animate-ping opacity-20"></div>
                   <img
-                    src={Brain}
-                    alt=""
-                    className="w-10 h-10 object-contain"
+                    src={StrongBrain}
+                    alt="Experience Brain"
+                    className="w-32 object-contain group-hover:scale-110 transition-transform duration-500"
                   />
-                </span>
-                <h3 className="font-bold text-indigo-900 text-2xl lg:text-3xl">
+                </div>
+                <h3 className="font-display text-4xl font-bold text-[#125EF2] mb-2 relative z-10">
+                  {a.pageTitle}
+                </h3>
+                <div className="w-12 h-1 bg-blue-600 rounded-full relative z-10"></div>
+              </div>
+            </div>
+          </ScrollReveal>
+
+          <ScrollReveal variant="fadeLeft" className="w-full lg:w-7/12">
+            <div className="pl-0 lg:pl-8 rtl:pl-0 rtl:lg:pr-8">
+              <div className="flex items-center gap-4 mb-8">
+                <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center shrink-0 shadow-inner">
+                  <img
+                    src={brainBlue}
+                    alt="Brain Icon"
+                    className="w-7 h-7 object-contain"
+                  />
+                </div>
+                <h3 className="text-4xl md:text-5xl font-display font-bold text-[#125EF2]">
                   {a.whoWeAre}
                 </h3>
               </div>
-              <p className="text-sm text-gray-700 leading-relaxed">
-                <span className="text-xl font-bold mainC">BLUE BRAIN </span>
-                {about?.about_description ??
-                  `is your strategic partner for excellence and creativity in design and digital development. We provide visual identity, logo design, video ads, social media design, apps and websites. Founded in 2014, we have served over 200 clients across Egypt, Saudi Arabia, and beyond.`}
-              </p>
-            </ScrollReveal>
-          </div>
-        </div>
 
-        {/* FAQ */}
-        {faq.length > 0 && (
-          <div className="py-20 px-5 container mx-auto">
-            <ScrollReveal variant="fadeUp">
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-indigo-900 mb-10">
+              <div className="bg-blue-700/50 rounded-3xl p-8 md:p-10 text-white relative overflow-hidden shadow-2xl">
+                {/* Decorative glow */}
+                <div className="absolute -top-20 -right-20 w-64 h-64 bg-blue-500 rounded-full blur-[80px] opacity-20 rtl:right-auto rtl:-left-20"></div>
+
+                <p className="text-lg leading-relaxed relative z-10 font-light opacity-90 text-justify">
+                  {about?.about_description || a.description}
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10 relative z-10 border-t border-white/10 pt-8">
+                  <div>
+                    <h4 className="text-xl font-bold text-blue-300 mb-3 uppercase tracking-wider">
+                      {a.mission}
+                    </h4>
+                    <p className="text-white/70 text-sm leading-relaxed">
+                      {a.missionText}
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="text-xl font-bold text-blue-300 mb-3 uppercase tracking-wider">
+                      {a.vision}
+                    </h4>
+                    <p className="text-white/70 text-sm leading-relaxed">
+                      {a.visionText}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ─── FAQ SECTION ─── */}
+      {faq.length > 0 && (
+        <section className="container mx-auto px-4 mb-32 max-w-4xl">
+          <ScrollReveal variant="fadeUp">
+            <div className="text-center mb-16">
+              <h2 className="font-display text-4xl md:text-5xl font-bold text-[#125EF2] uppercase tracking-wide">
                 {a.questionsTitle}
               </h2>
-            </ScrollReveal>
-            <div className="flex flex-col gap-4">
-              {faq.map((item, i) => (
-                <ScrollReveal key={i} variant="fadeUp" delay={`${i * 80}ms`}>
-                  <AccordionItem item={item} />
-                </ScrollReveal>
+              <div className="w-24 h-1.5 bg-blue-600 rounded-full mx-auto mt-6"></div>
+            </div>
+
+            <div className="space-y-4">
+              {faq.map((item, index) => (
+                <AccordionItem
+                  key={index}
+                  title={item.question}
+                  content={item.answer}
+                  isOpen={openFaq === index}
+                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                />
               ))}
             </div>
-          </div>
-        )}
+          </ScrollReveal>
+        </section>
+      )}
 
-        {/* PARTNERS */}
-        {clients.length > 0 && (
-          <div className="py-20 px-5 container mx-auto">
+      {/* ─── PARTNERS SECTION ─── */}
+      {clients.length > 0 && (
+        <section className="py-24 bg-white relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent"></div>
+          <div className="container mx-auto px-4">
             <ScrollReveal variant="fadeUp">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-indigo-900 mb-10 leading-tight whitespace-pre-line">
-                {a.partnersTitle}
-              </h2>
+              <div className="text-center mb-16">
+                <h2 className="font-display text-4xl md:text-5xl font-bold text-[#125EF2] uppercase tracking-wide">
+                  {a.partnersTitle}
+                </h2>
+                <div className="w-24 h-1.5 bg-blue-600 rounded-full mx-auto mt-6"></div>
+              </div>
             </ScrollReveal>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-              {clients.map((client, index) => (
-                <ScrollReveal
-                  key={index}
-                  variant="zoomIn"
-                  delay={`${index * 60}ms`}>
-                  <div className="flex items-center rounded-2xl justify-center">
+
+            {/* Using the infinite marquee layout for partners */}
+            <div
+              className="relative w-full overflow-hidden marquee-container flex flex-col gap-6 pb-4"
+              dir="ltr">
+              {/* Row 1 */}
+              <div
+                className="flex w-max gap-6 animate-marquee"
+                style={{ animationDuration: "50s" }}>
+                {[
+                  ...clients,
+                  ...clients,
+                  ...clients,
+                  ...clients,
+                  ...clients,
+                  ...clients,
+                ].map((c, i) => (
+                  <div
+                    key={`row1-${i}`}
+                    className="w-48 lg:w-56 shrink-0 group aspect-[3/2] rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center p-6 hover:shadow-xl transition-all duration-500 hover:-translate-y-1 hover:bg-white cursor-pointer">
                     <img
-                      src={client.logo}
-                      alt={`Client ${index}`}
-                      className="w-full h-40 p-5 object-contain"
+                      src={c.logo}
+                      alt={c.name}
+                      className="max-w-full max-h-full object-contain filter grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110"
                     />
                   </div>
-                </ScrollReveal>
-              ))}
+                ))}
+              </div>
+
+              {/* Row 2 */}
+              <div
+                className="flex w-max gap-6 animate-marquee-reverse"
+                style={{ animationDuration: "50s" }}>
+                {[
+                  ...clients,
+                  ...clients,
+                  ...clients,
+                  ...clients,
+                  ...clients,
+                  ...clients,
+                ].map((c, i) => (
+                  <div
+                    key={`row2-${i}`}
+                    className="w-48 lg:w-56 shrink-0 group aspect-[3/2] rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center p-6 hover:shadow-xl transition-all duration-500 hover:-translate-y-1 hover:bg-white cursor-pointer">
+                    <img
+                      src={c.logo}
+                      alt={c.name}
+                      className="max-w-full max-h-full object-contain filter grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-110"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        )}
-      </section>
-    </div>
-  );
-}
-
-function AccordionItem({ item }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <div
-      onClick={() => setOpen(!open)}
-      className={`rounded-xl px-5 py-4 cursor-pointer transition-all duration-200 ${open ? "second" : "main"}`}>
-      <div className="flex justify-between items-center">
-        <span className="text-white text-sm font-medium">{item.question}</span>
-        <span className="text-white text-xs">{open ? "▲" : "▼"}</span>
-      </div>
-      {open && (
-       <p className="mt-3 text-sm text-white/80 leading-relaxed">
-          <div dangerouslySetInnerHTML={{ __html: item.answer }} />
-          
-        </p>
+        </section>
       )}
     </div>
   );

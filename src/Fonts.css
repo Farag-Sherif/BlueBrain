@@ -40,4 +40,6 @@
 body {
   font-family: "29LT Bukra", sans-serif;
   font-weight: 400;
+  font-feature-settings: "kern", "liga", "clig", "calt";
+  text-rendering: optimizeLegibility;
 }

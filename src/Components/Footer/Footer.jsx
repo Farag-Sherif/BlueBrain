@@ -1,14 +1,11 @@
 import { Link } from "react-router-dom";
 import { useLang } from "../../i18n/LanguageContext";
 import logo from "../../assets/Images/logo.png";
-import brain from "../../assets/Images/brain.png";
-import egypt from "../../assets/Images/egypt.png";
-import saudi from "../../assets/Images/saudi.png";
 import facebook from "../../assets/Social-Icons/facebook.png";
 import linkedin from "../../assets/Social-Icons/linkedin.png";
 import whatsapp from "../../assets/Social-Icons/whatsapp.png";
 import "./Footer.css";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
 
 const Footer = () => {
@@ -20,142 +17,140 @@ const Footer = () => {
   const [settings, setSettings] = useState(null);
 
   const socialLinks = [
-    { label: facebook, title: "Facebook" },
-    { label: linkedin, title: "LinkedIn" },
-    { label: whatsapp, title: "WhatsApp" },
+    { label: facebook, title: "Facebook", key: "social_facebook" },
+    { label: linkedin, title: "LinkedIn", key: "social_linkedin" },
+    { label: whatsapp, title: "WhatsApp", key: "whatsapp_number" },
   ];
+
   useEffect(() => {
     const fetchBranches = async () => {
       const data = await api.getBranches();
-      const settings = await api.getSettings();
-      setSettings(settings);
-      console.log(settings);
-
-      // console.log(data);
+      const settingsData = await api.getSettings();
+      setSettings(settingsData);
       if (data.length > 0) {
         setBranches(data);
-        // console.log(data);
-      } else {
-        console.error("Error fetching branches");
       }
     };
     fetchBranches();
   }, [lang]);
 
   return (
-    <footer
-      dir={t.dir}
-      className="text-white main pt-40 relative overflow-x-hidden">
-      <div className="custom-shape-divider-top-1776366482">
-        <svg
-          data-name="Layer 1"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-          className={`${t.dir === "rtl" ? "scale-x-[-1]" : ""}`}>
-          <path
-            d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-            className="shape-fill"></path>
+    <footer className="relative pt-40 pb-28 lg:pb-10 bg-gradient-to-b from-[#125EF2] to-[#0D47C2] text-white mt-20 overflow-hidden">
+      {/* Wave shape divider */}
+      <div className={`custom-shape-divider-top-1776366482 ${lang === "ar" ? "scale-x-[-1]" : ""}`}>
+        <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" className="shape-fill"></path>
         </svg>
       </div>
-      {/* Grid */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-5  lg:gap-10 pb-8 container mx-auto px-4">
-        {/* Brand */}
-        <div>
-          <div className="flex items-center gap-3 mb-4">
-            <img src={logo} alt="Logo" className="h-15 w-auto" />
-          </div>
 
-          <p className="text-sm leading-relaxed text-white/90 mb-6">
-            {f.tagline}
-          </p>
-
-          <div className="flex gap-5 justify-around md:justify-start mt-10">
-            {socialLinks.map(({ label, title }, index) => (
-              <a
-                key={index}
-                href={
-                  settings
-                    ? title.toLowerCase() === "whatsapp"
-                      ? `https://wa.me/${settings["whatsapp_number"]}`
-                      : settings[`social_${title.toLowerCase()}`]
-                    : "#"
+      <div className="container mx-auto px-4 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-8 mb-16">
+          {/* Brand Col */}
+          <div className="space-y-6">
+            <Link to="/" className="inline-block relative group">
+              <img src={logo} alt="Blue Brain Logo" className="h-16 w-auto relative z-10" />
+              <div className="absolute inset-0 bg-blue-500 blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-500 rounded-full"></div>
+            </Link>
+            <p className="text-white/70 leading-relaxed text-[15px] max-w-sm">
+              {f.tagline}
+            </p>
+            <div className="flex gap-4 pt-2">
+              {socialLinks.map((social, index) => {
+                let url = "#";
+                if (settings) {
+                  if (social.key === "whatsapp_number" && settings[social.key]) {
+                    url = `https://wa.me/${settings[social.key]}`;
+                  } else if (settings[social.key]) {
+                    url = settings[social.key];
+                  }
                 }
-                target="_blank"
-                rel="noopener noreferrer"
-                title={title}
-                className="w-12 h-12 flex items-center justify-center">
-                <img src={label} alt={title} className="w-full h-auto" />
-              </a>
-            ))}
+                return (
+                  <a
+                    key={index}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center hover:bg-white/25 hover:scale-110 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all duration-300 group"
+                  >
+                    <img src={social.label} alt={social.title} className="w-5 h-5 object-contain filter brightness-0 invert transition-all duration-300" />
+                  </a>
+                );
+              })}
+            </div>
           </div>
-        </div>
 
-        {/* Links */}
-        <div>
-          <h3 className="text-xl font-bold mb-5 tracking-wide flex items-center">
-            <img src={brain} alt="" className="w-8 h-auto mr-2" /> {f.quickLinks}
-          </h3>
-
-          <ul className="flex flex-col gap-2 mx-5">
-            {quickLinks.map((link) => (
-              <li key={link.to} className="flex items-center gap-2">
-                <span className="text-xs text-white/70">•</span>
-
-                <Link
-                  to={link.to}
-                  className="text-md font-bold text-white/90 hover:text-white transition">
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Contact */}
-        <div className="md:col-span-2 lg:col-span-1 mt-10 lg:mt-0">
-          <h3 className="text-xl font-bold mb-4 tracking-wide flex items-center">
-            <img src={brain} alt="" className="w-8 h-auto mr-2" />
-            {f.contactInfo}
-          </h3>
-          <div className="info flex flex-col md:flex-row lg:flex-col gap-4">
-            {branches.map(({ name, address, phone, email }, index) => (
-              <div key={index} className="mb-4 mx-5 flex flex-col gap-2">
-                <p className="text-lg font-bold text-white/80 mb-2 flex items-center gap-2">
-                  {lang === "en" ? "for" : "ل"} {name}
-                </p>
-
-                <div className="flex flex-col gap-2 text-md text-white/85">
-                  <div className="flex gap-2 items-start">
-                    <span>
-                      <FaMapMarkerAlt />
+          {/* Quick Links Col */}
+          <div>
+            <h3 className="text-xl font-display font-bold mb-8 text-white tracking-wide relative inline-block">
+              {f.quickLinks}
+              <span className="absolute -bottom-3 left-0 w-1/2 h-1 bg-gradient-to-r from-white/60 to-transparent rounded-full rtl:right-0 rtl:left-auto rtl:bg-gradient-to-l"></span>
+            </h3>
+            <ul className="space-y-4">
+              {quickLinks.map((link) => (
+                <li key={link.to}>
+                  <Link
+                    to={link.to}
+                    className="group flex items-center text-white/80 hover:text-white transition-colors duration-300 w-fit"
+                  >
+                    <span className={`inline-block w-2 h-2 rounded-full bg-white mr-3 rtl:ml-3 rtl:mr-0 opacity-0 group-hover:opacity-100 transform -translate-x-2 rtl:translate-x-2 group-hover:translate-x-0 transition-all duration-300`}></span>
+                    <span className="relative overflow-hidden font-medium">
+                      {link.label}
+                      <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-white/60 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
                     </span>
-                    <span className="text-wrap">{address}</span>
-                  </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-                  <div className="flex gap-2 items-center">
-                    <span>
-                      <FaPhoneAlt />
-                    </span>
-                    <span className="text-wrap">{phone}</span>
+          {/* Contact Info Col */}
+          <div>
+            <h3 className="text-xl font-display font-bold mb-8 text-white tracking-wide relative inline-block">
+              {f.contactInfo}
+              <span className="absolute -bottom-3 left-0 w-1/2 h-1 bg-gradient-to-r from-white/60 to-transparent rounded-full rtl:right-0 rtl:left-auto rtl:bg-gradient-to-l"></span>
+            </h3>
+            <div className="space-y-5">
+              {branches.length > 0 ? (
+                branches.map((branch, idx) => (
+                  <div key={idx} className="rounded-2xl p-6 bg-white/10 border border-white/15 backdrop-blur-sm hover:bg-white/15 transition-all duration-500 hover:-translate-y-1">
+                    <h4 className="text-white font-bold mb-5 text-sm uppercase tracking-widest">{branch.name}</h4>
+                    <ul className="space-y-4">
+                      <li className="flex items-start gap-4">
+                        <div className="mt-1 w-10 h-10 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0 border border-white/20">
+                          <FaMapMarkerAlt className="text-white/90 text-sm" />
+                        </div>
+                        <span className="text-[15px] text-white/80 leading-relaxed pt-1">{branch.address}</span>
+                      </li>
+                      <li className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0 border border-white/20">
+                          <FaPhoneAlt className="text-white/90 text-sm" />
+                        </div>
+                        <span className="text-[15px] text-white/80 font-medium" dir="ltr">{branch.phone}</span>
+                      </li>
+                      <li className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center flex-shrink-0 border border-white/20">
+                          <FaEnvelope className="text-white/90 text-sm" />
+                        </div>
+                        <span className="text-[15px] text-white/80">{branch.email}</span>
+                      </li>
+                    </ul>
                   </div>
-
-                  <div className="flex gap-2 items-center">
-                    <span>
-                      <FaEnvelope />
-                    </span>
-                    <span className="text-wrap">{email}</span>
-                  </div>
+                ))
+              ) : (
+                <div className="space-y-3 text-sm text-white/70">
+                  <p className="animate-pulse">Loading contact info...</p>
                 </div>
-              </div>
-            ))}
+              )}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Bottom */}
-      <div className="text-center py-4 text-sm text-white/80 tracking-wide border-t-3">
-        {f.rights}
+        {/* Bottom Bar */}
+        <div className="border-t border-white/10 pt-8 pb-2 flex flex-col items-center justify-center text-center">
+          <p className="text-white/50 text-[13px] font-medium tracking-wide">
+            {f.rights}
+          </p>
+        </div>
       </div>
     </footer>
   );

@@ -1,12 +1,10 @@
-.services{
-    .serviceTitle:hover ~ .description{
-        opacity: 1;
-        max-height: fit-content;
-        transition: all 0.5s ease-in-out;
-        text-align: start;
-        
-    }
+.services .serviceTitle:hover ~ .description {
+    opacity: 1; 
+    max-height: fit-content; 
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+    text-align: start;
 }
+
 .custom-shape-divider-top-1776792837 {
     direction: ltr;
     position: absolute;
@@ -15,37 +13,65 @@
     width: 100%;
     overflow: hidden;
     line-height: 0;
-    transform: rotate(180deg);
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
 }
 
-.custom-shape-divider-top-1776792837 svg {
-    position: relative;
-    display: block;
-    width: calc(300% + 1.3px);
-    height: 228px;
+.custom-shape-divider-top-1776792837 svg { 
+    position: relative; 
+    display: block; 
+    width: calc(300% + 1.3px); 
+    height: 80px; 
 }
 
-.custom-shape-divider-top-1776792837 .shape-fill {
-    fill: #FFFFFF;
+@media (min-width: 768px) {
+    .custom-shape-divider-top-1776792837 svg { 
+        height: 120px; 
+    }
 }
+
+.custom-shape-divider-top-1776792837 .shape-fill { 
+    fill: var(--surface-alt); 
+}
+
 .custom-shape-divider-bottom-1776792791 {
-    direction: ltr;
-    position: absolute;
-    bottom: -10px;
-    left: 0;
+    direction: ltr; 
+    position: absolute; 
+    bottom: -10px; 
+    left: 0; 
     width: 100%;
-    overflow: hidden;
-    line-height: 0;
+    overflow: hidden; 
+    line-height: 0; 
     transform: rotate(180deg);
 }
 
-.custom-shape-divider-bottom-1776792791 svg {
-    position: relative;
-    display: block;
-    width: calc(300% + 1.3px);
-    height: 228px;
+.custom-shape-divider-bottom-1776792791 svg { 
+    position: relative; 
+    display: block; 
+    width: calc(300% + 1.3px); 
+    height: 80px; 
 }
 
-.custom-shape-divider-bottom-1776792791 .shape-fill {
-    fill: #FFFFFF;
+@media (min-width: 768px) {
+    .custom-shape-divider-bottom-1776792791 svg { 
+        height: 120px; 
+    }
+}
+
+.custom-shape-divider-bottom-1776792791 .shape-fill { 
+    fill: var(--surface-alt); 
+}
+
+/* Service Card Hover Fix */
+.service-card-group:hover .service-description-overlay {
+    opacity: 1;
+    transform: translateY(0);
+}
+.service-description-overlay {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }

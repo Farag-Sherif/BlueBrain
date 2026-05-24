@@ -1,6 +1,7 @@
 const en = {
   dir: "ltr",
   toggleLang: "ع",
+  switchToLang: "التبديل للعربية",
 
   // ─── Header ───────────────────────────────────────────
   openMenu: "Open main menu",
@@ -39,10 +40,13 @@ const en = {
   // ─── Home Page ────────────────────────────────────────
   home: {
     heroTitle: "Creative Solutions Agency",
+    heroBadge: "Welcome to Blue Brain",
     heroSubtitle: "We help your brand grow with smart, creative strategies.",
     heroBtn: "Get Started",
+    explorePortfolio: "View Our Work",
     letsTouch: "Let's Get in Touch",
     yearsExp: "Years of Experience",
+    establishedExcellence: "Established Excellence",
     aboutTitle: "About Us",
     whoWeAre: "Who We Are?",
     aboutText:
@@ -71,6 +75,7 @@ const en = {
           "Our vision for executing our work is different, and this is how our teams produce work that is always creative, unique, and increases the chances of success.",
       },
     ],
+    learnMore: "Read More",
     servicesTitle: ["How can we help", " your business"],
     services: [
       {
@@ -114,6 +119,8 @@ const en = {
     projectView: "View",
     projectWatch: "Watch",
     clientsTitle: "Our Clients",
+    viewAllServices: "View All Services",
+    serviceDetails: "Service Details",
   },
 
   // ─── Services Page ────────────────────────────────────
@@ -153,6 +160,9 @@ const en = {
         description: "Expert advice to guide your business decisions.",
       },
     ],
+    transformTitle: "Ready to transform your business?",
+    transformSubtitle: "Let's discuss how our services can help you achieve your goals and stand out in the market.",
+    getConsultation: "Get Free Consultation",
   },
 
   // ─── About Page ───────────────────────────────────────
@@ -178,6 +188,9 @@ const en = {
     pageTitle: "Our Team",
     loading: "Loading team...",
     error: "Error fetching team",
+    title: "Meet Our Experts",
+    subtitle: "The talented people behind our success. We are a team of passionate professionals dedicated to delivering excellence.",
+    noTeam: "No team members available at the moment.",
   },
 
   // ─── Projects Page ────────────────────────────────────

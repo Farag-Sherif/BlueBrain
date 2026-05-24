@@ -11,31 +11,32 @@ export default function Consultation() {
   return (
     <>
       <Title>{c.pageTitle}</Title>
-      <section className="container mx-auto my-10 px-5 pb-20">
-        <ScrollReveal variant="fadeUp" delay="0ms">
-          <div className="relative mb-10 rounded-2xl overflow-hidden shadow-2xl">
-            <iframe
-              className="w-full h-[400px] md:h-[500px]"
-              src={consultationVideo}
-              title="Consultation Video"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-        </ScrollReveal>
-
-        <ScrollReveal variant="fadeUp" delay="150ms">
-          <div className="p-8 bg-white drop-shadow-2xl rounded-2xl mb-10">
-            <div className="flex items-center gap-2 mb-10">
-              <span className="text-2xl md:text-3xl lg:text-4xl">🎯</span>
-              <h2 className="text-lg md:text-2xl lg:text-3xl font-bold mainC">
-                {c.requestTitle}
-              </h2>
+      <section className="container mx-auto my-10 px-4 pb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          <ScrollReveal variant="fadeRight" delay="0ms">
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+              <iframe
+                className="w-full h-[400px] md:h-[500px]"
+                src={consultationVideo}
+                title="Consultation Video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
             </div>
-            <ConsultationForm />
-          </div>
-        </ScrollReveal>
+          </ScrollReveal>
+
+          <ScrollReveal variant="fadeLeft" delay="150ms">
+            <div className="p-8 md:p-10 bg-white drop-shadow-2xl rounded-3xl border border-gray-100">
+              <div className="flex items-center gap-3 mb-10">
+                <h2 className="text-2xl md:text-3xl font-bold text-[#125EF2]">
+                  {c.requestTitle}
+                </h2>
+              </div>
+              <ConsultationForm />
+            </div>
+          </ScrollReveal>
+        </div>
       </section>
     </>
   );

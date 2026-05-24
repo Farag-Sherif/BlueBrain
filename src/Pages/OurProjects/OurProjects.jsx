@@ -1,60 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import Title from "../../Components/Title/Title";
+import { useEffect, useState } from "react";
 import { useLang } from "../../i18n/LanguageContext";
 import Loading from "../../Components/Loading/Loading";
 import ScrollReveal from "../../Components/ScrollReveal/ScrollReveal";
-
-function ProjectCard({ project }) {
-  return (
-    <Link
-      to={`/project-details/${project.id}`}
-      className="group block bg-white rounded-2xl h-full overflow-hidden border-2 border-transparent shadow-lg transition-all duration-300 hover:border-indigo-600 hover:shadow-xl">
-      <div className="relative h-60 flex items-center justify-center">
-        <div className="absolute inset-0 flex items-center justify-center bg-indigo-500/60 opacity-0 group-hover:opacity-100 transition-all duration-300">
-          <div className="w-10 h-10 rounded-full border-2 border-white flex items-center justify-center text-white bg-white/20">
-            ▶
-          </div>
-        </div>
-        <img
-          src={project.image}
-          alt={project.title}
-          className="w-full h-full object-contain py-5"
-        />
-      </div>
-      <div className="p-4">
-        <h3 className="font-bold text-sm md:text-md lg:text-lg mb-1 mainC group-hover:text-indigo-700 transition">
-          {project.title}
-        </h3>
-        <p className="text-xs text-gray-500 leading-relaxed mb-3  line-clamp-2">
-          {project.description}
-        </p>
-        <div className="flex flex-wrap gap-1">
-          {project.tags.map((tag, i) => (
-            <span
-              key={i}
-              className={`text-sm bg-indigo-100 ${tag.color} px-4 py-1 rounded-xl  line-clamp-1`}>
-              {tag.name}
-            </span>
-          ))}
-        </div>
-      </div>
-    </Link>
-  );
-}
+import ProjectCard from "../../Components/ProjectCard/ProjectCard";
 
 export default function OurProjects() {
-  const { t, lang, api } = useLang();
-  const p = t.projects;
-
+  const { lang, t, api } = useLang();
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [video, setVideo] = useState(null);
 
   useEffect(() => {
     const fetchProjects = async () => {
       setLoading(true);
       const data = await api.getProjects();
-      if (data.length > 0) setProjects(data);
+      setProjects(data);
       setLoading(false);
     };
     fetchProjects();
@@ -63,21 +24,67 @@ export default function OurProjects() {
   if (loading) return <Loading />;
 
   return (
-    <>
-      <Title>{p.pageTitle}</Title>
-      <section className="min-h-screen px-5 pb-20 container mx-auto">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-          {projects.map((project, index) => (
-            <ScrollReveal
-              key={project.id}
-              variant="fadeUp"
-              delay={`${(index % 3) * 100}ms`}
-              className="cursor-pointer transform hover:-translate-y-1 transition duration-300">
-              <ProjectCard project={project} />
+    <div className=" min-h-screen pb-32 mainC">
+      <Title>{t.projects.pageTitle}</Title>
+      
+      <div className="container mx-auto px-4">
+        {/* Intro Header */}
+        <ScrollReveal variant="fadeUp" className="mb-16">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="text-center md:text-left rtl:md:text-right">
+              <h2 className="font-display text-4xl md:text-5xl font-bold text-[#125EF2] mb-4 uppercase tracking-wide">
+                {t.projects.title || t.home.projectsTitle}
+              </h2>
+              <p className="text-slate-600 text-lg font-light">
+                {lang === "ar" 
+                  ? `${projects.length} مشروع تم تنفيذه بنجاح` 
+                  : `${projects.length} Projects Successfully Delivered`
+                }
+              </p>
+            </div>
+            <div className="flex items-center gap-3 flex-wrap justify-center">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-sm font-semibold backdrop-blur-md">
+                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                {t.projects.completed}
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-sm font-semibold backdrop-blur-md">
+                <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+                {t.projects.inProgress}
+              </div>
+            </div>
+          </div>
+          <div className="w-24 h-1.5 bg-[#125EF2] rounded-full mt-8 mx-auto md:mx-0 rtl:md:mr-0"></div>
+        </ScrollReveal>
+
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projects.map((p, index) => (
+            <ScrollReveal key={p.id} variant="fadeUp" delay={`${(index % 3) * 120}ms`}>
+              <ProjectCard p={p} index={index} t={t} lang={lang} setVideo={setVideo} />
             </ScrollReveal>
           ))}
         </div>
-      </section>
-    </>
+      </div>
+
+      {/* Video Modal */}
+      {video && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-[#0a1628]/90 backdrop-blur-md" onClick={() => setVideo(null)}></div>
+          <div className="relative z-10 h-[85vh] max-h-[800px] aspect-[9/16] rounded-[2.5rem] overflow-hidden shadow-2xl bg-black border border-white/10 animate-fadeInUp">
+            <button
+              onClick={() => setVideo(null)}
+              className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full glass-dark flex items-center justify-center text-white hover:bg-red-500 hover:scale-110 transition-all duration-300 rtl:right-auto rtl:left-4"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <div className="w-full h-full bg-black">
+              <video src={video} className="w-full h-full object-cover" controls autoPlay />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
