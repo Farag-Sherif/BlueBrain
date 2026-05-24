@@ -27,7 +27,7 @@ const Header = () => {
       >
         <nav aria-label="Global" className="flex items-center justify-between container mx-auto px-4">
           <Link to="/" className="-m-1.5 p-1.5 flex-shrink-0">
-            <img src={logo} alt="Blue Brain Logo" className={`h-10 sm:h-12 w-auto object-contain hover:scale-105 transition-transform duration-300 ${isScrolled ? "brightness-0 invert" : "brightness-0 invert lg:brightness-100"}`} />
+            <img src={logo} alt="Blue Brain Logo" className={`h-10 sm:h-12 w-auto object-contain hover:scale-105 transition-transform duration-300 ${isScrolled ? "brightness-0" : "brightness-0 lg:brightness-100"}`} />
           </Link>
 
           {/* Mobile Language Button (replaces Hamburger) */}
