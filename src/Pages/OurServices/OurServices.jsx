@@ -13,11 +13,10 @@ const OfferModal = ({ service, onClose, t, api }) => {
     e.preventDefault();
     if (!form.phone || !form.offer) return;
     setLoading(true);
-    await api.sendConsultation({
-      name: "Offer Request",
+    await api.sendQuote({
+      service_id: service.id,
       phone: form.phone,
-      type: service.title,
-      consultation: form.offer,
+      offer: form.offer,
     });
     setLoading(false);
     setSent(true);

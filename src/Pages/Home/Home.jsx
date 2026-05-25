@@ -17,6 +17,9 @@ import PartnersSuccess from "./Clients";
 import ScrollReveal from "../../Components/ScrollReveal/ScrollReveal";
 import { Link } from "react-router-dom";
 
+
+
+
 export default function Home() {
   const { t, lang, api } = useLang();
   const h = t.home;

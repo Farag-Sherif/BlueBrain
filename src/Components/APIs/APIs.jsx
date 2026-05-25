@@ -70,6 +70,7 @@ export const createApi = (lang = "en") => ({
   getClients: () => get("/api/clients", lang, []),
   getFaq: () => get("/api/faqs", lang, []),
   getSettings: () => getOne("/api/settings", lang, null),
+  sendQuote: (data) => post("/api/quote", data, lang),
 
   sendContact: (data) => post("/api/contact", data, lang),
   sendConsultation: (data) => post("/api/consultation", data, lang),

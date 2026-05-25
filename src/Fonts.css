@@ -43,3 +43,6 @@ body {
   font-feature-settings: "kern", "liga", "clig", "calt";
   text-rendering: optimizeLegibility;
 }
+html[lang="ar"] body {
+  font-family: "Abu Hijlah", sans-serif;
+}
