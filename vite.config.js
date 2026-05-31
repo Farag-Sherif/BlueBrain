@@ -20,8 +20,8 @@ export default defineConfig({
         short_name: "Blue Brain",
         description:
           "Blue Brain is a creative solutions agency specializing in brand identity, digital marketing, web & app development, video production, and exhibition design.",
-        theme_color: "#123EF2",
-        background_color: "#0a0a0f",
+        theme_color: "#fff",
+        background_color: "#123EF2",
         display: "standalone",
         orientation: "portrait",
         scope: "/",
@@ -29,7 +29,7 @@ export default defineConfig({
         lang: "en",
         icons: [
           {
-            src: "/بلو برين-02.jpg.jpeg",
+            src: "/بلو برين-01.jpg.jpeg",
             sizes: "192x192",
             type: "image/jpeg",
             purpose: "any maskable",
