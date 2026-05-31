@@ -26,6 +26,7 @@ const Footer = () => {
     const fetchBranches = async () => {
       const data = await api.getBranches();
       const settingsData = await api.getSettings();
+      console.log(settingsData)
       setSettings(settingsData);
       if (data.length > 0) {
         setBranches(data);

@@ -14,7 +14,8 @@ const Download = () => {
   }, []);
 
   // Use the profile PDF link if available in settings, else fallback
-  const downloadLink = settings && settings.profile_pdf ? settings.profile_pdf : "#";
+  const downloadLink =
+    settings && settings.portfolio_file ? settings.portfolio_file : "#";
 
   return (
     <a 
