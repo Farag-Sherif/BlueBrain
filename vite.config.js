@@ -11,7 +11,6 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       includeAssets: [
-        "بلو برين-05.png",
         "بلو برين-01.jpg.jpeg",
         "بلو برين-02.jpg.jpeg",
         "بلو برين-03.jpg.jpeg",
