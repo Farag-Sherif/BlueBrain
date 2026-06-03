@@ -63,7 +63,7 @@ export default function ProjectDetails() {
     fetchProject();
   }, [id, lang]);
 
-  const videos = project?.media?.filter((m) => m.type === "video") ?? [];
+  const videos = (project?.media ?? []).filter((m) => m.type === "video").sort((a, b) => a.order - b.order);
  const images = (project?.media ?? [])
    .filter((m) => m.type === "image")
    .sort((a, b) => a.order - b.order);

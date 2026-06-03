@@ -14,7 +14,7 @@ export default function NewProjectCarousel() {
     const fetchProjects = async () => {
       const data = await api.getProjects();
       console.log("Fetched Projects:", data);
-      setProjects(data);
+      setProjects([...data].sort((a, b) => a.order - b.order));
     };
     fetchProjects();
   }, []);
