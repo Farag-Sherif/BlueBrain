@@ -15,13 +15,14 @@ export default function OurProjects() {
     const fetchProjects = async () => {
       setLoading(true);
       const data = await api.getProjects();
-      setProjects(data);
+    setProjects([...data].sort((a, b) => a.order - b.order));
       setLoading(false);
     };
     fetchProjects();
   }, [lang]);
 
   if (loading) return <Loading />;
+  
 
   return (
     <div className=" min-h-screen pb-32 mainC">

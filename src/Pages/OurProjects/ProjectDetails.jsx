@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import Carousel from "../../Components/Carousel/Carousel";
 import { useLang } from "../../i18n/LanguageContext";
 import ScrollReveal from "../../Components/ScrollReveal/ScrollReveal";
+import { sortedArray } from "three/src/animation/AnimationUtils.js";
 
 const VideoCard = ({ item, onPlay }) => (
   <div className="group relative rounded-2xl overflow-hidden bg-slate-900 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 cursor-pointer border border-white/5" onClick={onPlay}>
@@ -54,16 +55,18 @@ export default function ProjectDetails() {
   useEffect(() => {
     const fetchProject = async () => {
       setLoading(true);
-      const data = await api.getProjects();
-      const found = data.find((p) => String(p.id) === String(id));
-      setProject(found ?? null);
+      const data = await api.getProject(id);
+      setProject(data);
+      console.log(data)
       setLoading(false);
     };
     fetchProject();
   }, [id, lang]);
 
   const videos = project?.media?.filter((m) => m.type === "video") ?? [];
-  const images = project?.media?.filter((m) => m.type === "image") ?? [];
+ const images = (project?.media ?? [])
+   .filter((m) => m.type === "image")
+   .sort((a, b) => a.order - b.order);
   const files  = project?.media?.filter((m) => m.type === "file")  ?? [];
 
   const downloadableFile =

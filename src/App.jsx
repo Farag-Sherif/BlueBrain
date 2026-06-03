@@ -7,6 +7,7 @@ import ScrollToTop from "./Components/Scrolltotop ";
 import Whatsapp from "./Components/Whatsapp/Whatsapp";
 import Download from "./Components/Download/Download";
 import BottomBar from "./Components/BottomBar/BottomBar";
+import FloatingAIBtn from "./Components/FloatingAIBtn/FloatingAIBtn";
 // import your page routes here
 
 const App = () => {
@@ -17,6 +18,7 @@ const App = () => {
       <AppRoutes />
       <Whatsapp />
       <Download />
+      <FloatingAIBtn />
       <BottomBar />
       <Footer />
     </LanguageProvider>

@@ -7,6 +7,7 @@ import Consultation from "./Pages/Consultation/Consultation";
 import ProjectDetails from "./Pages/OurProjects/ProjectDetails";
 import About from "./Pages/About/About";
 import OurServices from "./Pages/OurServices/OurServices";
+import AIBoothDesigner from "./Pages/AIBoothDesigner/AIBoothDesigner";
 
 
 const AppRoutes = () => {
@@ -20,7 +21,7 @@ const AppRoutes = () => {
       <Route path="/project-details/:id" element={<ProjectDetails />} />
       <Route path="/about" element={<About />} />
       <Route path="/services" element={<OurServices />} />
-
+      <Route path="/ai-booth-designer" element={<AIBoothDesigner />} />
 
 
     </Routes>

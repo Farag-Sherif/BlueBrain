@@ -11,7 +11,8 @@ import {
   FaInfoCircle, 
   FaUsers, 
   FaCommentDots, 
-  FaPhoneAlt 
+  FaPhoneAlt,
+  FaMagic
 } from "react-icons/fa";
 
 const BottomBar = () => {
@@ -47,6 +48,7 @@ const BottomBar = () => {
   const isTeamActive = currentPath === "/team";
   const isConsultationActive = currentPath === "/consultation";
   const isContactActive = currentPath === "/contact";
+  const isAiActive = currentPath === "/ai-booth-designer";
 
   // Main Bar Localization
   const homeLabel = lang === "ar" ? "الرئيسية" : "Home";
@@ -56,6 +58,7 @@ const BottomBar = () => {
 
   // Popup Menu Localization & Configuration
   const menuItems = [
+    { to: "/ai-booth-designer", label: lang === "ar" ? "تصميم بالذكاء الاصطناعي" : "AI Booth Designer", icon: FaMagic, active: isAiActive },
     { to: "/services", label: lang === "ar" ? "الخدمات" : "Services", icon: FaCogs, active: isServicesActive },
     { to: "/about", label: lang === "ar" ? "من نحن" : "About Us", icon: FaInfoCircle, active: isAboutActive },
     { to: "/team", label: lang === "ar" ? "الفريق" : "Team", icon: FaUsers, active: isTeamActive },
@@ -63,7 +66,7 @@ const BottomBar = () => {
     { to: "/contact", label: lang === "ar" ? "اتصل بنا" : "Contact", icon: FaPhoneAlt, active: isContactActive },
   ];
 
-  const anyPopupActive = isAboutActive || isServicesActive || isTeamActive || isConsultationActive || isContactActive;
+  const anyPopupActive = isAboutActive || isServicesActive || isTeamActive || isConsultationActive || isContactActive || isAiActive;
 
   return (
     <>

@@ -66,6 +66,7 @@ export const createApi = (lang = "en") => ({
   getServices: () => get("/api/services", lang, []),
   getTeam: () => get("/api/team", lang, []),
   getProjects: () => get("/api/projects", lang, []),
+  getProject: (id) => getOne(`/api/projects/${id}`, lang, null),
   getBranches: () => get("/api/branches", lang, []),
   getClients: () => get("/api/clients", lang, []),
   getFaq: () => get("/api/faqs", lang, []),

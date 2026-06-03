@@ -15,12 +15,11 @@ export default function Consultation() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           <ScrollReveal variant="fadeRight" delay="0ms">
             <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
-              <iframe
+              <video
                 className="w-full h-[400px] md:h-[500px]"
                 src={consultationVideo}
                 title="Consultation Video"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                controls
                 allowFullScreen
               />
             </div>

@@ -258,6 +258,129 @@ const en = {
       "SEO & Analytics",
     ],
   },
+  aiBooth: {
+    configureBadge: "Configure Your Booth",
+    tellAiTitle: "Tell AI What You Need",
+    tellAiDesc: "Fill in your requirements and our AI will generate custom concepts tailored to your specifications.",
+    steps: {
+      dimensions: "Dimensions",
+      boothType: "Booth Type",
+      styleIndustry: "Style & Industry",
+      features: "Features",
+      budgetNotes: "Budget & Notes"
+    },
+    dimensions: {
+      title: "Basic Dimensions",
+      subtitle: "Enter your booth's physical dimensions in meters.",
+      width: "Width",
+      depth: "Depth",
+      height: "Height",
+      totalFloorArea: "Total Floor Area",
+      volume: "Volume",
+    },
+    boothTypes: {
+      title: "Booth Type",
+      subtitle: "Select the configuration that best fits your exhibition space.",
+      inline: { label: "Inline Booth", desc: "One open side" },
+      corner: { label: "Corner Booth", desc: "Two open sides" },
+      peninsula: { label: "Peninsula Booth", desc: "Three open sides" },
+      island: { label: "Island Booth", desc: "Four open sides" }
+    },
+    preferences: {
+      title: "Design Preferences",
+      subtitle: "Define the look, feel, and industry context for your booth.",
+      styleLabel: "Design Style",
+      colorsLabel: "Preferred Brand Colors",
+      colorsHint: "pick up to 3",
+      colorsSelected: "selected",
+      industryLabel: "Industry Type",
+      styles: {
+        Modern: "Modern",
+        Luxury: "Luxury",
+        Minimalist: "Minimalist",
+        Technology: "Technology",
+        Corporate: "Corporate"
+      },
+      industries: {
+        Technology: "Technology",
+        Healthcare: "Healthcare",
+        Automotive: "Automotive",
+        RealEstate: "Real Estate",
+        Retail: "Retail",
+        Finance: "Finance",
+        FoodBeverage: "Food & Beverage",
+        Fashion: "Fashion",
+        Education: "Education",
+        Energy: "Energy"
+      }
+    },
+    features: {
+      title: "Booth Features",
+      subtitle: "Select the features you want included in your booth.",
+      included: "Included",
+      items: {
+        led: "LED Screen",
+        reception: "Reception Counter",
+        meeting: "Meeting Room",
+        storage: "Storage Room",
+        double: "Double Deck"
+      }
+    },
+    budgetNotes: {
+      title: "Budget & Notes",
+      subtitle: "Set your target budget and share any additional requirements.",
+      budgetLabel: "Budget Range",
+      notesLabel: "Additional Notes",
+      notesPlaceholder: "Describe any special requirements, branding guidelines, or specific functional needs for your booth…",
+      summaryTitle: "Your Configuration Summary",
+      summaryGrid: {
+        size: "Size",
+        type: "Type",
+        style: "Style",
+        industry: "Industry",
+        features: "Features",
+        budget: "Budget"
+      }
+    },
+    nav: {
+      back: "← Back",
+      continue: "Continue →",
+      generate: "Generate AI Concepts"
+    },
+    processing: {
+      title: "Creating your booth concepts...",
+      tags: {
+        dimensions: "Dimensions",
+        boothType: "Booth Type",
+        designStyle: "Design Style",
+        features: "Features",
+        pricing: "Pricing"
+      },
+      status: [
+        "Analyzing your requirements…",
+        "Generating design concepts…",
+        "Calculating pricing estimates…",
+        "Finalizing your results…"
+      ]
+    },
+    results: {
+      title: "Your AI-Generated Concepts",
+      subtitle: "Based on your booth requirements, our AI has generated unique concepts.",
+      estimatedCost: "Estimated Cost",
+      viewDetails: "View Details",
+      selected: "✓ Selected",
+      pricingTitle: "Pricing Summary",
+      pricingSubtitle: "Based on your booth",
+      baseCost: "Estimated Base Cost",
+      optionalFeatures: "Optional Features",
+      designPm: "Design & Project Management",
+      visuals3d: "3D Visualizations",
+      totalCost: "Total Estimated Cost",
+      note: "* Prices are estimates. Final quote depends on venue, logistics & production specifics.",
+      requestBtn: "Request Official Quote",
+      newDesignBtn: "Generate New Design"
+    }
+  }
 };
 
 export default en;
