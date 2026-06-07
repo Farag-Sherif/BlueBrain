@@ -13,6 +13,7 @@ export default function OurTeam() {
     const fetchTeam = async () => {
       setLoading(true);
       const data = await api.getTeam();
+      console.log(data)
       if (data && data.length > 0) {
         setTeam(data);
       }
@@ -26,9 +27,11 @@ export default function OurTeam() {
   return (
     <div className="bg-[var(--surface-alt)] min-h-screen pb-32">
       <Title>{t.team.pageTitle}</Title>
-      
+
       <div className="container mx-auto px-4 mt-8">
-        <ScrollReveal variant="fadeUp" className="text-center max-w-3xl mx-auto mb-20">
+        <ScrollReveal
+          variant="fadeUp"
+          className="text-center max-w-3xl mx-auto mb-20">
           <h2 className="font-display text-4xl md:text-5xl font-bold text-slate-800 mb-6 uppercase tracking-wide">
             {t.team.title}
           </h2>
@@ -41,20 +44,23 @@ export default function OurTeam() {
         {team.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-16 mt-16">
             {team.map((member, index) => (
-              <ScrollReveal key={index} variant="fadeUp" delay={`${(index % 4) * 100}ms`}>
+              <ScrollReveal
+                key={index}
+                variant="fadeUp"
+                delay={`${(index % 4) * 100}ms`}>
                 <div className="group relative pt-24">
                   {/* Card Background */}
                   <div className="bg-white rounded-3xl p-8 pt-28 text-center shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 h-full relative z-10 hover:-translate-y-2">
                     {/* Glowing effect on hover */}
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent to-blue-50/50 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
+
                     <h3 className="font-display text-2xl font-bold text-slate-800 mb-2 relative z-10 group-hover:text-blue-600 transition-colors">
                       {member.name}
                     </h3>
-                    <p className="text-[#125EF2] font-medium text-sm uppercase tracking-widest relative z-10">
-                      {member.job_title}
+                    <p className="text-slate-600 group-hover:text-[#125EF2] font-bold text-sm uppercase tracking-widest relative z-10">
+                      {member.position}
                     </p>
-                    
+
                     {/* Decorative underline */}
                     <div className="w-10 h-0.5 bg-slate-200 mx-auto mt-6 rounded-full group-hover:bg-[#125EF2] group-hover:w-16 transition-all duration-500 relative z-10"></div>
                   </div>
@@ -68,7 +74,10 @@ export default function OurTeam() {
                           src={member.image}
                           alt={member.name}
                           className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500"
-                          onError={(e) => { e.target.onerror = null; e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=125EF2&color=fff&size=200`; }}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(member.name)}&background=125EF2&color=fff&size=200`;
+                          }}
                         />
                       </div>
                     </div>

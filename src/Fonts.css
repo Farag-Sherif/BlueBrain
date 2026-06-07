@@ -38,11 +38,14 @@
   font-display: swap;
 }
 body {
-  font-family: "29LT Bukra", sans-serif;
+  font-family: "29LT Bukra", "Abu Hijlah", sans-serif;
   font-weight: 400;
   font-feature-settings: "kern", "liga", "clig", "calt";
   text-rendering: optimizeLegibility;
 }
-html[lang="ar"] body {
-  font-family: "Abu Hijlah", sans-serif;
+html[dir = "rtl"] body,
+html[dir = "rtl"] * ,
+html[lang="ar"] body,
+html[lang="ar"] * {
+  font-family: "29LT Bukra", "Abu Hijlah", sans-serif !important;
 }

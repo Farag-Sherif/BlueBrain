@@ -37,7 +37,8 @@ const BottomBar = () => {
   const currentPath = location.pathname.toLowerCase();
   
   const whatsappLink = settings && settings["whatsapp_number"] ? `https://wa.me/${settings["whatsapp_number"]}` : "#";
-  const downloadLink = settings && settings.profile_pdf ? settings.profile_pdf : "#";
+  const downloadLink =
+    settings && settings.portfolio_file ? settings.portfolio_file : "#";
 
   const isHomeActive = currentPath === "/";
   const isPortfolioActive = currentPath === "/portfolio";
