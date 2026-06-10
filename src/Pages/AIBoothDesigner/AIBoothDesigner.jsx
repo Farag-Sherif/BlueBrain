@@ -9,12 +9,12 @@ const AI_API_URL = "/api/get-ai";
 const formatCurrency = (amount, lang) => {
   if (!amount) return "";
   if (typeof amount === "string") {
-    if (amount.includes("EGP") || amount.includes("ج.م") || amount.includes("$")) return amount;
-    return lang === "ar" ? `${amount} ج.م` : `${amount} EGP`;
+    if (amount.includes("EGP") || amount.includes("ج.م") || amount.includes("$") || amount.includes("دولار")) return amount;
+    return lang === "ar" ? `${amount} دولار` : `$${amount}`;
   }
   return lang === "ar" 
-    ? `${amount.toLocaleString()} ج.م` 
-    : `${amount.toLocaleString()} EGP`;
+    ? `${amount.toLocaleString()} دولار` 
+    : `$${amount.toLocaleString()}`;
 };
 
 /* ─── Static Data ────────────────────────────────────────────────────────── */
@@ -187,12 +187,12 @@ function Particles() {
 /* ─── Main Component ─────────────────────────────────────────────────────── */
 export default function AIBoothDesigner() {
   const { lang, t } = useLang();
-  const [step, setStep] = useState(1); // 1–5 form steps
-  const [generating, setGenerating] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [results, setResults] = useState(null);
-  const [selectedCard, setSelectedCard] = useState(null);
+  const [step, setStep] = useState(1); // 1–6 form steps
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [referenceNumber, setReferenceNumber] = useState("");
   const [error, setError] = useState(null);
+  const [logoBase64, setLogoBase64] = useState("");
 
   // Form state (Default budget is set to 1,000,000 EGP)
   const [width, setWidth] = useState(6);
@@ -203,97 +203,87 @@ export default function AIBoothDesigner() {
   const [colors, setColors] = useState(["#125EF2"]);
   const [industry, setIndustry] = useState("Technology");
   const [features, setFeatures] = useState([]);
-  const [budget, setBudget] = useState(1000000);
+  const [budget, setBudget] = useState(10000);
   const [notes, setNotes] = useState("");
 
-  const resultsRef = useRef(null);
   const formRef = useRef(null);
 
   function toggleFeature(id) {
     setFeatures(f => f.includes(id) ? f.filter(x => x !== id) : [...f, id]);
   }
 
-  function handleGenerate() {
-    setGenerating(true);
-    setError(null);
-    setProgress(0);
-    
-    // Animate progress up to 90% while waiting for API
-    let p = 0;
-    const timer = setInterval(() => {
-      p += Math.random() * 8;
-      if (p >= 90) {
-        p = 90;
-        clearInterval(timer);
-      }
-      setProgress(Math.min(p, 90));
-    }, 200);
+  function handleLogoUpload(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogoBase64(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
 
-    const payload = {
-      width,
-      depth,
-      height,
-      boothType,
-      designStyle,
-      colors,
-      industry,
-      features,
-      budget,
-      notes
+  async function handleSubmitRequest() {
+    setIsSubmitting(true);
+    setError(null);
+
+    const featureMapping = {
+      led: "led_screen",
+      reception: "reception_counter",
+      meeting: "meeting_room",
+      storage: "storage_room",
+      double: "double_deck"
     };
 
-    // Calling the backend API for AI generation
-    axios.post(AI_API_URL, payload)
-      .then(response => {
-        clearInterval(timer);
-        const generatedConcepts = response.data.concepts || response.data;
-        
-        setProgress(100);
-        setTimeout(() => {
-          setGenerating(false);
-          setResults(generatedConcepts);
-          setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
-        }, 500);
-      })
-      .catch(err => {
-        clearInterval(timer);
-        console.warn("API Error, falling back to scaled EGP mock concepts:", err);
-        
-        // Dynamically scale EGP mock concepts based on size for a realistic preview
-        const scaledConcepts = CONCEPTS.map(c => {
-          const areaRatio = (width * depth) / 24;
-          const estimatedCost = Math.round(c.basePrice * areaRatio);
-          return {
-            ...c,
-            price: formatCurrency(estimatedCost, lang),
-            basePrice: estimatedCost
-          };
-        });
+    const payload = {
+      width_m: width,
+      depth_m: depth,
+      height_m: height,
+      booth_type: boothType.toLowerCase(),
+      design_style: designStyle.toLowerCase(),
+      industry_type: industry,
+      color_primary: colors[0] || "#125EF2",
+      color_secondary: colors[1] || "#FFFFFF",
+      color_tertiary: colors[2] || "#000000",
+      budget: budget,
+      additional_notes: notes,
+      features: features.map(f => featureMapping[f] || f),
+      logo: logoBase64 || null
+    };
 
-        setProgress(100);
-        setTimeout(() => {
-          setGenerating(false);
-          setResults(scaledConcepts);
-          setTimeout(() => resultsRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
-        }, 500);
+    try {
+      const response = await axios.post("https://dashbaord.bluebrain-co.com/api/booth-configurations", payload, {
+        headers: { "Content-Type": "application/json" }
       });
+      setSubmitSuccess(true);
+      if (response.data && response.data.reference_number) {
+        setReferenceNumber(response.data.reference_number);
+      }
+      setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 100);
+    } catch (err) {
+      console.error("API Error during submission:", err);
+      if (err.response && err.response.data) {
+        console.error("Validation Details:", err.response.data);
+      }
+      setError(lang === "ar" ? "حدث خطأ أثناء إرسال الطلب. يرجى المحاولة مرة أخرى." : "An error occurred while submitting the request. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   function scrollToForm() {
     formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  // Pricing breakdown (Coefficients scaled for EGP: 60,000 EGP per sq m, 40,000 EGP per m height)
-  const base = results ? Math.round((width * depth * 60000) + (height * 40000)) : 0;
-  const featureCost = 0; // No extra cost for features!
-  const total = base;
+
 
   const STEPS = [
     t.aiBooth.steps.dimensions,
     t.aiBooth.steps.boothType,
     t.aiBooth.steps.styleIndustry,
     t.aiBooth.steps.features,
-    t.aiBooth.steps.budgetNotes
+    t.aiBooth.steps.budgetNotes,
+    t.aiBooth.steps.review || (lang === "ar" ? "مراجعة وتقديم" : "Review & Submit")
   ];
 
   return (
@@ -434,6 +424,22 @@ export default function AIBoothDesigner() {
                   })}
                 </select>
               </div>
+
+              <div className="abd-field">
+                <label className="abd-label">{t.aiBooth.submit?.brandLogo || (lang === "ar" ? "شعار العلامة التجارية" : "Brand Logo")}</label>
+                <input 
+                  type="file" 
+                  accept=".png,.jpg,.jpeg,.svg" 
+                  onChange={handleLogoUpload} 
+                  className="abd-input" 
+                  style={{ padding: "0.5rem", background: "#f8fafc", borderRadius: "8px", border: "1px solid #e2e8f0" }}
+                />
+                {logoBase64 && (
+                  <div style={{ marginTop: "10px" }}>
+                    <img src={logoBase64} alt="Brand Logo Preview" style={{ maxWidth: "150px", maxHeight: "100px", borderRadius: "8px", objectFit: "contain" }} />
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
@@ -468,8 +474,8 @@ export default function AIBoothDesigner() {
                 <label className="abd-label">{t.aiBooth.budgetNotes.budgetLabel}</label>
                 <RangeSlider
                   value={budget} onChange={setBudget}
-                  min={100000} max={5000000} step={50000}
-                  formatLabel={v => lang === "ar" ? `${(v / 1000).toLocaleString()} ألف ج.م` : `${(v / 1000).toLocaleString()}k EGP`}
+                  min={1000} max={50000} step={1000}
+                  formatLabel={v => lang === "ar" ? `$${(v / 1000).toLocaleString()}k` : `$${(v / 1000).toLocaleString()}k`}
                 />
               </div>
 
@@ -484,8 +490,26 @@ export default function AIBoothDesigner() {
                 />
               </div>
 
-              <div className="abd-summary-preview">
+              <div className="abd-summary-preview" style={{ opacity: 0.5 }}>
+                <p><i>{(lang === "ar" ? "سيتم عرض الملخص في الخطوة القادمة." : "Summary will be shown in the next step.")}</i></p>
+              </div>
+            </div>
+          )}
+
+          {/* ── Step 6: Review & Submit */}
+          {step === 6 && !submitSuccess && (
+            <div className="abd-form-step animate-fadeInUp">
+              <h3 className="abd-step-title">{t.aiBooth.submit?.reviewSubmit || (lang === "ar" ? "مراجعة وتقديم" : "Review & Submit")}</h3>
+              
+              <div className="abd-summary-preview" style={{ marginBottom: "2rem" }}>
                 <h4>{t.aiBooth.budgetNotes.summaryTitle}</h4>
+                
+                {logoBase64 && (
+                  <div style={{ marginBottom: "1rem", display: "flex", justifyContent: "center" }}>
+                    <img src={logoBase64} alt="Brand Logo" style={{ maxWidth: "150px", maxHeight: "100px", objectFit: "contain", background: "#fff", padding: "8px", borderRadius: "8px" }} />
+                  </div>
+                )}
+
                 <div className="abd-summary-grid">
                   <div><span>{t.aiBooth.budgetNotes.summaryGrid.size}</span><strong>{width}m × {depth}m × {height}m</strong></div>
                   <div><span>{t.aiBooth.budgetNotes.summaryGrid.type}</span><strong>{t.aiBooth.boothTypes[boothType]?.label || boothType}</strong></div>
@@ -494,178 +518,94 @@ export default function AIBoothDesigner() {
                   <div><span>{t.aiBooth.budgetNotes.summaryGrid.features}</span><strong>{features.length > 0 ? features.map(fid => t.aiBooth.features.items[fid] || fid).join(", ") : (lang === "ar" ? "لا يوجد" : "None")}</strong></div>
                   <div><span>{t.aiBooth.budgetNotes.summaryGrid.budget}</span><strong>{formatCurrency(budget, lang)}</strong></div>
                 </div>
+                {notes && (
+                  <div style={{ marginTop: "1rem", paddingTop: "1rem", borderTop: "1px solid rgba(0,0,0,0.05)" }}>
+                    <span style={{ fontSize: "0.875rem", color: "#64748b" }}>{t.aiBooth.budgetNotes.notesLabel}:</span>
+                    <p style={{ marginTop: "0.5rem", fontSize: "0.95rem" }}>{notes}</p>
+                  </div>
+                )}
               </div>
+
+              <div className="abd-submit-notice" style={{ padding: "1.5rem", background: "#f8fafc", borderRadius: "12px", border: "1px solid #e2e8f0", textAlign: "center", marginBottom: "1.5rem" }}>
+                <p style={{ fontSize: "1.1rem", color: "#334155", fontWeight: "500" }}>
+                  {t.aiBooth.submit?.manualReviewNote || (lang === "ar" ? "سيتم إعداد عرض السعر النهائي يدوياً بواسطة فريق Blue Brain بعد مراجعة متطلباتك." : "Final quotation will be prepared manually by the Blue Brain team after reviewing your requirements.")}
+                </p>
+              </div>
+
+              {error && (
+                <div style={{ padding: "1rem", background: "#fef2f2", color: "#ef4444", borderRadius: "8px", marginBottom: "1.5rem", textAlign: "center" }}>
+                  {error}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Success State */}
+          {submitSuccess && (
+            <div className="abd-form-step animate-fadeInUp" style={{ textAlign: "center", padding: "3rem 1rem" }}>
+              <div style={{ fontSize: "4rem", marginBottom: "1rem" }}>✅</div>
+              <h3 className="abd-step-title">{t.aiBooth.submit?.submitSuccess || (lang === "ar" ? "تم تقديم الطلب بنجاح!" : "Request submitted successfully!")}</h3>
+              {referenceNumber && (
+                <p style={{ fontSize: "1.2rem", marginTop: "1rem", color: "#475569" }}>
+                  {lang === "ar" ? "رقم المرجع:" : "Reference Number:"} <strong>{referenceNumber}</strong>
+                </p>
+              )}
+              <p style={{ marginTop: "1.5rem", color: "#64748b" }}>
+                {t.aiBooth.submit?.manualReviewNote || (lang === "ar" ? "سيتم إعداد عرض السعر النهائي يدوياً بواسطة فريق Blue Brain بعد مراجعة متطلباتك." : "Final quotation will be prepared manually by the Blue Brain team after reviewing your requirements.")}
+              </p>
+              <button 
+                className="abd-btn-outline" 
+                style={{ marginTop: "2rem" }}
+                onClick={() => window.location.reload()}
+              >
+                {t.aiBooth.results.newDesignBtn}
+              </button>
             </div>
           )}
 
           {/* Navigation Buttons */}
-          <div className="abd-form-nav">
-            {step > 1 && (
-              <button type="button" className="abd-btn-outline" onClick={() => setStep(s => s - 1)}>
-                {t.aiBooth.nav.back}
-              </button>
-            )}
-            <div style={{ flex: 1 }} />
-            {step < 5 ? (
-              <button type="button" className="abd-btn-primary" onClick={() => setStep(s => s + 1)} id={`next-step-${step}`}>
-                {t.aiBooth.nav.continue}
-              </button>
-            ) : (
-              <button
-                type="button"
-                className="abd-btn-generate"
-                onClick={handleGenerate}
-                id="generate-btn"
-              >
-                <span className="abd-generate-icon">✦</span>
-                {t.aiBooth.nav.generate}
-              </button>
-            )}
-          </div>
+          {!submitSuccess && (
+            <div className="abd-form-nav">
+              {step > 1 && (
+                <button type="button" className="abd-btn-outline" onClick={() => setStep(s => s - 1)}>
+                  {t.aiBooth.nav.back}
+                </button>
+              )}
+              <div style={{ flex: 1 }} />
+              {step < 6 ? (
+                <button type="button" className="abd-btn-primary" onClick={() => setStep(s => s + 1)} id={`next-step-${step}`}>
+                  {t.aiBooth.nav.continue}
+                </button>
+              ) : (
+                <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", justifyContent: "flex-end" }}>
+                  <button
+                    type="button"
+                    className="abd-btn-generate"
+                    disabled
+                    title={t.aiBooth.submit?.aiGenerationComingSoon || (lang === "ar" ? "تصميم الذكاء الاصطناعي - قريباً" : "AI Design Generation - Coming Soon")}
+                    style={{ opacity: 0.5, cursor: "not-allowed" }}
+                  >
+                    <span className="abd-generate-icon">✦</span>
+                    {t.aiBooth.submit?.comingSoon || (lang === "ar" ? "قريباً" : "Coming Soon")}
+                  </button>
+
+                  <button
+                    type="button"
+                    className="abd-btn-primary"
+                    onClick={handleSubmitRequest}
+                    disabled={isSubmitting}
+                    id="submit-request-btn"
+                  >
+                    {isSubmitting ? (lang === "ar" ? "جاري الإرسال..." : "Submitting...") : (t.aiBooth.submit?.submitRequest || (lang === "ar" ? "تقديم الطلب" : "Submit Request"))}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
-      {/* ── AI PROCESSING ────────────────────────────────────────────────── */}
-      {generating && (
-        <section className="abd-processing">
-          <div className="abd-processing-inner">
-            <div className="abd-ai-orb">
-              <div className="abd-orb-ring abd-orb-ring-1" />
-              <div className="abd-orb-ring abd-orb-ring-2" />
-              <div className="abd-orb-ring abd-orb-ring-3" />
-              <div className="abd-orb-core">✦</div>
-            </div>
-            <h3 className="abd-processing-title">{t.aiBooth.processing.title}</h3>
-            <p className="abd-processing-sub">
-              {progress < 30 ? t.aiBooth.processing.status[0]
-                : progress < 60 ? t.aiBooth.processing.status[1]
-                : progress < 85 ? t.aiBooth.processing.status[2]
-                : t.aiBooth.processing.status[3]}
-            </p>
-            <div className="abd-progress-track">
-              <div className="abd-progress-bar" style={{ width: `${progress}%` }} />
-            </div>
-            <div className="abd-progress-pct">{Math.round(progress)}%</div>
-            <div className="abd-processing-tags">
-              {["dimensions", "boothType", "designStyle", "features", "pricing"].map((tagKey, i) => (
-                <span
-                  key={tagKey}
-                  className={`abd-proc-tag${progress > i * 20 ? " done" : ""}`}
-                >{progress > i * 20 ? "✓ " : ""}{t.aiBooth.processing.tags[tagKey]}</span>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
 
-      {/* ── RESULTS ──────────────────────────────────────────────────────── */}
-      {results && !generating && (
-        <section className="abd-results" ref={resultsRef} id="results-section">
-          <div className="abd-section-header">
-            <div className="abd-section-badge abd-badge-success">
-              ✓ 4 {lang === "ar" ? "تصميمات تم توليدها" : "Concepts Generated"}
-            </div>
-            <h2 className="abd-section-title">{t.aiBooth.results.title}</h2>
-            <p className="abd-section-desc">
-              {lang === "ar" 
-                ? `بناءً على أبعاد ومواصفات جناحك بمقاس ${width}م × ${depth}م، قام الذكاء الاصطناعي بتوليد 4 مفاهيم تصميم فريدة.` 
-                : `Based on your ${width}m × ${depth}m booth requirements, our AI has generated 4 unique concepts.`}
-            </p>
-          </div>
-
-          <div className="abd-results-grid">
-            {results.map((c) => (
-              <div
-                key={c.id}
-                className={`abd-concept-card${selectedCard === c.id ? " selected" : ""}`}
-                onClick={() => setSelectedCard(c.id)}
-                id={`concept-card-${c.id}`}
-              >
-                <div className="abd-concept-img-wrap">
-                  <img src={c.img} alt={c.title} className="abd-concept-img" />
-                  <div className="abd-concept-style-badge">
-                    {t.aiBooth.preferences.styles[c.style] || c.style}
-                  </div>
-                  <div className="abd-concept-price-badge">{formatCurrency(c.price, lang)}</div>
-                </div>
-                <div className="abd-concept-body">
-                  <h3 className="abd-concept-title">{c.title}</h3>
-                  <p className="abd-concept-desc">{c.desc}</p>
-                  <ul className="abd-concept-features">
-                    {c.features.map(f => (
-                      <li key={f}><span className="abd-feat-dot">✦</span>{f}</li>
-                    ))}
-                  </ul>
-                  <div className="abd-concept-footer">
-                    <div className="abd-concept-price-full">
-                      <span>{t.aiBooth.results.estimatedCost}</span>
-                      <strong>{formatCurrency(c.price, lang)}</strong>
-                    </div>
-                    <button
-                      className="abd-btn-view"
-                      id={`view-details-${c.id}`}
-                      onClick={e => { e.stopPropagation(); setSelectedCard(c.id); }}
-                    >
-                      {selectedCard === c.id ? t.aiBooth.results.selected : t.aiBooth.results.viewDetails}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* ── Pricing Panel */}
-          <div className="abd-pricing-panel">
-            <div className="abd-pricing-glass">
-              <div className="abd-pricing-header">
-                <div className="abd-pricing-icon">💰</div>
-                <div>
-                  <h3>{t.aiBooth.results.pricingTitle}</h3>
-                  <p>{t.aiBooth.results.pricingSubtitle} {width}m × {depth}m × {height}m</p>
-                </div>
-              </div>
-              <div className="abd-pricing-rows">
-                <div className="abd-pricing-row">
-                  <span>{t.aiBooth.results.baseCost}</span>
-                  <span className="abd-price-val">{formatCurrency(base, lang)}</span>
-                </div>
-                <div className="abd-pricing-row">
-                  <span>{t.aiBooth.results.optionalFeatures} ({features.length} {lang === "ar" ? "محددة" : "selected"})</span>
-                  <span className="abd-price-val">{t.aiBooth.features.included}</span>
-                </div>
-                <div className="abd-pricing-row abd-pricing-row-sub">
-                  <span className="abd-pricing-sub-label">{t.aiBooth.results.designPm}</span>
-                  <span className="abd-price-val-sub">{t.aiBooth.features.included}</span>
-                </div>
-                <div className="abd-pricing-row abd-pricing-row-sub">
-                  <span className="abd-pricing-sub-label">{t.aiBooth.results.visuals3d}</span>
-                  <span className="abd-price-val-sub">{t.aiBooth.features.included}</span>
-                </div>
-              </div>
-              <div className="abd-pricing-divider" />
-              <div className="abd-pricing-total">
-                <span>{t.aiBooth.results.totalCost}</span>
-                <strong>{formatCurrency(total, lang)}</strong>
-              </div>
-              <div className="abd-pricing-note">
-                {t.aiBooth.results.note}
-              </div>
-              <div className="abd-pricing-actions">
-                <button className="abd-btn-primary" style={{ width: "100%" }} id="request-quote-btn">
-                  {t.aiBooth.results.requestBtn}
-                </button>
-                <button
-                  className="abd-btn-outline" style={{ width: "100%" }}
-                  onClick={() => { setResults(null); setStep(1); window.scrollTo({ top: 0, behavior: "smooth" }); }}
-                  id="new-design-btn"
-                >
-                  {t.aiBooth.results.newDesignBtn}
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
 
 
     </div>

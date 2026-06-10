@@ -265,7 +265,8 @@ const ar = {
       boothType: "نوع الجناح",
       styleIndustry: "النمط والمجال",
       features: "الميزات",
-      budgetNotes: "الميزانية والملاحظات"
+      budgetNotes: "الميزانية والملاحظات",
+      review: "مراجعة وتقديم"
     },
     dimensions: {
       title: "الأبعاد الأساسية",
@@ -377,6 +378,16 @@ const ar = {
       note: "* الأسعار تقديرية. يعتمد السعر النهائي على موقع الفعالية، الخدمات اللوجستية وتفاصيل الإنتاج والتنفيذ.",
       requestBtn: "طلب عرض سعر رسمي للتنفيذ",
       newDesignBtn: "إنشاء تصميم جديد ✦"
+    },
+    submit: {
+      brandLogo: "شعار العلامة التجارية",
+      uploadLogo: "رفع الشعار",
+      reviewSubmit: "مراجعة وتقديم",
+      submitRequest: "تقديم الطلب",
+      manualReviewNote: "سيتم إعداد عرض السعر النهائي يدوياً بواسطة فريق Blue Brain بعد مراجعة متطلباتك.",
+      submitSuccess: "تم تقديم الطلب بنجاح!",
+      comingSoon: "قريباً",
+      aiGenerationComingSoon: "تصميم الذكاء الاصطناعي - قريباً"
     }
   }
 };

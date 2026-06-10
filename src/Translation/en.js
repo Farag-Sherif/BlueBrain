@@ -267,7 +267,8 @@ const en = {
       boothType: "Booth Type",
       styleIndustry: "Style & Industry",
       features: "Features",
-      budgetNotes: "Budget & Notes"
+      budgetNotes: "Budget & Notes",
+      review: "Review & Submit"
     },
     dimensions: {
       title: "Basic Dimensions",
@@ -379,6 +380,16 @@ const en = {
       note: "* Prices are estimates. Final quote depends on venue, logistics & production specifics.",
       requestBtn: "Request Official Quote",
       newDesignBtn: "Generate New Design"
+    },
+    submit: {
+      brandLogo: "Brand Logo",
+      uploadLogo: "Upload Logo",
+      reviewSubmit: "Review & Submit",
+      submitRequest: "Submit Request",
+      manualReviewNote: "Final quotation will be prepared manually by the Blue Brain team after reviewing your requirements.",
+      submitSuccess: "Request submitted successfully!",
+      comingSoon: "Coming Soon",
+      aiGenerationComingSoon: "AI Design Generation - Coming Soon"
     }
   }
 };
