@@ -193,6 +193,7 @@ export default function AIBoothDesigner() {
   const [referenceNumber, setReferenceNumber] = useState("");
   const [error, setError] = useState(null);
   const [logoBase64, setLogoBase64] = useState("");
+  const [logoFile, setLogoFile] = useState(null);
 
   // Form state (Default budget is set to 1,000,000 EGP)
   const [width, setWidth] = useState(6);
@@ -205,6 +206,9 @@ export default function AIBoothDesigner() {
   const [features, setFeatures] = useState([]);
   const [budget, setBudget] = useState(10000);
   const [notes, setNotes] = useState("");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [company, setCompany] = useState("");
 
   const formRef = useRef(null);
 
@@ -215,6 +219,7 @@ export default function AIBoothDesigner() {
   function handleLogoUpload(e) {
     const file = e.target.files[0];
     if (file) {
+      setLogoFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setLogoBase64(reader.result);
@@ -235,26 +240,36 @@ export default function AIBoothDesigner() {
       double: "double_deck"
     };
 
-    const payload = {
-      width_m: width,
-      depth_m: depth,
-      height_m: height,
-      booth_type: boothType.toLowerCase(),
-      design_style: designStyle.toLowerCase(),
-      industry_type: industry,
-      color_primary: colors[0] || "#125EF2",
-      color_secondary: colors[1] || "#FFFFFF",
-      color_tertiary: colors[2] || "#000000",
-      budget: budget,
-      additional_notes: notes,
-      features: features.map(f => featureMapping[f] || f),
-      logo: logoBase64 || null
-    };
+    const formData = new FormData();
+    formData.append("width_m", width);
+    formData.append("depth_m", depth);
+    formData.append("height_m", height);
+    formData.append("booth_type", boothType.toLowerCase());
+    formData.append("design_style", designStyle.toLowerCase());
+    formData.append("industry_type", industry);
+    formData.append("color_primary", colors[0] || "#125EF2");
+    formData.append("color_secondary", colors[1] || "#FFFFFF");
+    formData.append("color_tertiary", colors[2] || "#000000");
+    formData.append("budget", budget);
+    formData.append("additional_notes", notes);
+    formData.append("name", name);
+    formData.append("phone", phone);
+    formData.append("company", company);
+
+    const mappedFeatures = features.map(f => featureMapping[f] || f);
+    mappedFeatures.forEach(f => {
+      formData.append("features[]", f);
+    });
+
+    if (logoFile) {
+      formData.append("logo", logoFile);
+    }
 
     try {
-      const response = await axios.post("https://dashbaord.bluebrain-co.com/api/booth-configurations", payload, {
-        headers: { "Content-Type": "application/json" }
+      const response = await axios.post("https://dashbaord.bluebrain-co.com/api/booth-configurations", formData, {
+        headers: { "Content-Type": "multipart/form-data" }
       });
+      console.log(response);
       setSubmitSuccess(true);
       if (response.data && response.data.reference_number) {
         setReferenceNumber(response.data.reference_number);
@@ -469,6 +484,42 @@ export default function AIBoothDesigner() {
             <div className="abd-form-step animate-fadeInUp">
               <h3 className="abd-step-title">{t.aiBooth.budgetNotes.title}</h3>
               <p className="abd-step-subtitle">{t.aiBooth.budgetNotes.subtitle}</p>
+
+              <div className="abd-field">
+                <label className="abd-label">{lang === "ar" ? "الاسم" : "Name"}</label>
+                <input
+                  type="text"
+                  className="abd-input"
+                  style={{ width: "100%", padding: "0.75rem", borderRadius: "8px", border: "1px solid #e2e8f0", outline: "none", boxSizing: "border-box", fontFamily: "inherit" }}
+                  placeholder={lang === "ar" ? "أدخل اسمك" : "Enter your name"}
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                />
+              </div>
+
+              <div className="abd-field">
+                <label className="abd-label">{lang === "ar" ? "رقم الهاتف" : "Phone"}</label>
+                <input
+                  type="tel"
+                  className="abd-input"
+                  style={{ width: "100%", padding: "0.75rem", borderRadius: "8px", border: "1px solid #e2e8f0", outline: "none", boxSizing: "border-box", fontFamily: "inherit" }}
+                  placeholder={lang === "ar" ? "أدخل رقم الهاتف" : "Enter your phone number"}
+                  value={phone}
+                  onChange={e => setPhone(e.target.value)}
+                />
+              </div>
+
+              <div className="abd-field" style={{ marginBottom: "2rem" }}>
+                <label className="abd-label">{lang === "ar" ? "الشركة" : "Company"}</label>
+                <input
+                  type="text"
+                  className="abd-input"
+                  style={{ width: "100%", padding: "0.75rem", borderRadius: "8px", border: "1px solid #e2e8f0", outline: "none", boxSizing: "border-box", fontFamily: "inherit" }}
+                  placeholder={lang === "ar" ? "أدخل اسم الشركة" : "Enter your company name"}
+                  value={company}
+                  onChange={e => setCompany(e.target.value)}
+                />
+              </div>
 
               <div className="abd-field">
                 <label className="abd-label">{t.aiBooth.budgetNotes.budgetLabel}</label>
