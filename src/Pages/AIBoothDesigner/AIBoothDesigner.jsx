@@ -122,6 +122,7 @@ function AnimatedCounter({ target, suffix = "", duration = 2000 }) {
 
 /* ─── Range Slider ───────────────────────────────────────────────────────── */
 function RangeSlider({ value, onChange, min, max, step, formatLabel }) {
+  const { lang } = useLang();
   const pct = ((value - min) / (max - min)) * 100;
   return (
     <div className="abd-range-wrap">
@@ -129,7 +130,7 @@ function RangeSlider({ value, onChange, min, max, step, formatLabel }) {
         type="range" min={min} max={max} step={step}
         value={value} onChange={e => onChange(Number(e.target.value))}
         className="abd-range"
-        style={{ background: `linear-gradient(to right, #125EF2 ${pct}%, #e2e8f0 ${pct}%)` }}
+        style={{ background: `linear-gradient(${lang === 'ar' ? 'to left' : 'to right'}, #125EF2 ${pct}%, #e2e8f0 ${pct}%)` }}
       />
       <div className="abd-range-labels">
         <span>{formatLabel(min)}</span>
@@ -188,6 +189,7 @@ function Particles() {
 export default function AIBoothDesigner() {
   const { lang, t } = useLang();
   const [step, setStep] = useState(1); // 1–6 form steps
+  const [maxStep, setMaxStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [referenceNumber, setReferenceNumber] = useState("");
@@ -199,10 +201,10 @@ export default function AIBoothDesigner() {
   const [width, setWidth] = useState(6);
   const [depth, setDepth] = useState(4);
   const [height, setHeight] = useState(3);
-  const [boothType, setBoothType] = useState("modern");
-  const [designStyle, setDesignStyle] = useState("Modern");
-  const [colors, setColors] = useState(["#125EF2"]);
-  const [industry, setIndustry] = useState("Technology");
+  const [boothType, setBoothType] = useState("");
+  const [designStyle, setDesignStyle] = useState("");
+  const [colors, setColors] = useState([]);
+  const [industry, setIndustry] = useState("");
   const [features, setFeatures] = useState([]);
   const [budget, setBudget] = useState(10000);
   const [notes, setNotes] = useState("");
@@ -211,6 +213,43 @@ export default function AIBoothDesigner() {
   const [company, setCompany] = useState("");
 
   const formRef = useRef(null);
+
+  function handleNextStep() {
+    let isValid = false;
+    if (step === 1) {
+      if (!width || !depth || !height) {
+        alert(lang === "ar" ? "يرجى إدخال جميع الأبعاد" : "Please enter all dimensions");
+        return;
+      }
+      isValid = true;
+    } else if (step === 2) {
+      if (!boothType) {
+        alert(lang === "ar" ? "يرجى اختيار نوع الجناح" : "Please select a booth type");
+        return;
+      }
+      isValid = true;
+    } else if (step === 3) {
+      if (!designStyle || !industry || colors.length === 0) {
+        alert(lang === "ar" ? "يرجى استكمال جميع الخيارات (النمط، الألوان، الصناعة)" : "Please complete all selections (Style, Colors, Industry)");
+        return;
+      }
+      isValid = true;
+    } else if (step === 4) {
+      isValid = true;
+    } else if (step === 5) {
+      if (!name || !phone || !company) {
+        alert(lang === "ar" ? "يرجى إدخال بياناتك الشخصية (الاسم، الهاتف، الشركة)" : "Please enter your personal details (Name, Phone, Company)");
+        return;
+      }
+      isValid = true;
+    }
+
+    if (isValid) {
+      const next = step + 1;
+      setStep(next);
+      if (next > maxStep) setMaxStep(next);
+    }
+  }
 
   function toggleFeature(id) {
     setFeatures(f => f.includes(id) ? f.filter(x => x !== id) : [...f, id]);
@@ -320,7 +359,12 @@ export default function AIBoothDesigner() {
             <div
               key={i}
               className={`abd-step${step === i + 1 ? " active" : ""}${step > i + 1 ? " done" : ""}`}
-              onClick={() => setStep(i + 1)}
+              style={{ cursor: i + 1 > maxStep ? "not-allowed" : "pointer" }}
+              onClick={() => {
+                if (i + 1 <= maxStep) {
+                  setStep(i + 1);
+                }
+              }}
             >
               <div className="abd-step-num">{step > i + 1 ? "✓" : i + 1}</div>
               <span className="abd-step-label">{s}</span>
@@ -433,6 +477,7 @@ export default function AIBoothDesigner() {
                   value={industry}
                   onChange={e => setIndustry(e.target.value)}
                 >
+                  <option value="" disabled>{lang === "ar" ? "اختر الصناعة..." : "Select Industry..."}</option>
                   {INDUSTRIES.map(i => {
                     const key = i.replace(/\s+/g, "").replace("&", "");
                     return <option key={i} value={i}>{t.aiBooth.preferences.industries[key] || i}</option>;
@@ -624,7 +669,7 @@ export default function AIBoothDesigner() {
               )}
               <div style={{ flex: 1 }} />
               {step < 6 ? (
-                <button type="button" className="abd-btn-primary" onClick={() => setStep(s => s + 1)} id={`next-step-${step}`}>
+                <button type="button" className="abd-btn-primary" onClick={handleNextStep} id={`next-step-${step}`}>
                   {t.aiBooth.nav.continue}
                 </button>
               ) : (
